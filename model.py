@@ -29,15 +29,17 @@ class DRRN(torch.nn.Module):
         self.act_scorer   = nn.Linear(hidden_dim, 1)
 
         self.obs_att = BiAttention(hidden_dim, 0.)
-        self.look_att = BiAttention(hidden_dim, 0.)
-        self.inv_att = BiAttention(hidden_dim, 0.)
-        self.att_scorer   = nn.Sequential(nn.Linear(hidden_dim * 12, hidden_dim), nn.LeakyReLU(), nn.Linear(hidden_dim, 1))
+        # self.look_att = BiAttention(hidden_dim, 0.)
+        # self.inv_att = BiAttention(hidden_dim, 0.)
+        self.att_scorer   = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, 1))
         
-        self.state_encoder = nn.Linear(3 * hidden_dim, hidden_dim)
-        self.inverse_dynamics = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.ReLU(), nn.Linear(2 * hidden_dim, hidden_dim)) 
-        self.forward_dynamics = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.ReLU(), nn.Linear(2 * hidden_dim, hidden_dim)) 
+        self.state_encoder = nn.Linear(hidden_dim, hidden_dim)
+        self.inverse_dynamics = nn.Sequential(nn.Linear(hidden_dim * 2, hidden_dim * 2), nn.ReLU(), nn.Linear(hidden_dim * 2, hidden_dim)) 
+        self.inverse_dynamics_att = BiAttention(hidden_dim, 0.)
+        self.inverse_dynamics_lin = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, hidden_dim))
+        self.forward_dynamics = nn.Sequential(nn.Linear(hidden_dim, hidden_dim // 3), nn.ReLU(), nn.Linear(hidden_dim // 3, hidden_dim // 6)) 
         
-        self.act_decoder = nn.GRU(hidden_dim, embedding_dim)
+        self.act_decoder = nn.GRU(embedding_dim, embedding_dim)
         self.act_fc = nn.Linear(embedding_dim, vocab_size)
         
         self.obs_decoder = nn.GRU(hidden_dim, embedding_dim)
@@ -99,8 +101,8 @@ class DRRN(torch.nn.Module):
     def state_action_attention(self, state_batch, act_batch):
         state = State(*zip(*state_batch))
         obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
-        look_out = self.packed_rnn(state.obs, self.look_encoder, return_last=False).transpose(0, 1)
-        inv_out = self.packed_rnn(state.obs, self.inv_encoder, return_last=False).transpose(0, 1)
+        # look_out = self.packed_rnn(state.obs, self.look_encoder, return_last=False).transpose(0, 1)
+        # inv_out = self.packed_rnn(state.obs, self.inv_encoder, return_last=False).transpose(0, 1)
         act_sizes = [len(a) for a in act_batch]
         act_batch = list(itertools.chain.from_iterable(act_batch))
         act_out = self.packed_rnn(act_batch, self.act_encoder, return_last=False).transpose(0, 1)
@@ -110,14 +112,16 @@ class DRRN(torch.nn.Module):
                 act_mask[i, :len(act_batch[i])] = 1
         # print(obs_out.shape, act_sizes)
         obs_out = torch.repeat_interleave(obs_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
-        look_out = torch.repeat_interleave(look_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
-        inv_out = torch.repeat_interleave(inv_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+        # look_out = torch.repeat_interleave(look_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+        # inv_out = torch.repeat_interleave(inv_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
         # obs_out = torch.cat([obs_out[i].repeat(j, 1, 1) for i, j in enumerate(act_sizes)], dim=0)
         # print(obs_out.shape, act_out.shape)
         obs_out = self.obs_att(obs_out, act_out, act_mask)[:, -1, :]
-        look_out = self.look_att(look_out, act_out, act_mask)[:, -1, :]
-        inv_out = self.inv_att(inv_out, act_out, act_mask)[:, -1, :]
-        score = self.att_scorer(torch.cat((obs_out, look_out, inv_out), dim=-1)).squeeze(-1)
+        # look_out = self.look_att(look_out, act_out, act_mask)[:, -1, :]
+        # inv_out = self.inv_att(inv_out, act_out, act_mask)[:, -1, :]
+        # score = self.att_scorer(torch.cat((obs_out, look_out, inv_out), dim=-1)).squeeze(-1)
+        # print(obs_out.shape)
+        score = self.att_scorer(obs_out).squeeze(-1)
         score = torch.split(score, act_sizes)
         return score
     
@@ -153,6 +157,20 @@ class DRRN(torch.nn.Module):
 
 
     def inv_predict(self, state_batch, next_state_batch):
+        state = State(*zip(*state_batch))
+        obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
+        next_state = State(*zip(*state_batch))
+        next_obs_out = self.packed_rnn(next_state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
+        with torch.no_grad():
+            next_obs_mask = torch.zeros(next_obs_out.shape[:-1], dtype=torch.float, device=device)
+            for i in range(len(next_state_batch)):
+                next_obs_mask[i, :len(next_state_batch[i])] = 1
+        # print(obs_out.shape, next_obs_out.shape)
+        obs_out = self.inverse_dynamics_att(obs_out, next_obs_out, next_obs_mask)[:, -1, :]
+        # print(obs_out.shape)
+        obs_out = self.inverse_dynamics_lin(obs_out)
+        return obs_out
+
         state_out = self.state_rep(state_batch)
         next_state_out = self.state_rep(next_state_batch)
         # print(torch.cat((state_out, next_state_out - state_out), dim=1).shape)
@@ -290,7 +308,7 @@ class DRRN(torch.nn.Module):
 
 
     def forward(self, state_batch, act_batch):
-        # return self.state_action_attention(state_batch, act_batch)
+        return self.state_action_attention(state_batch, act_batch)
         """
             Batched forward pass.
             obs_id_batch: iterable of unpadded sequence ids
