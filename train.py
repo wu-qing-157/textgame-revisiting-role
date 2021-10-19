@@ -16,7 +16,7 @@ from vec_env import VecEnv
 
 
 logging.getLogger().setLevel(logging.CRITICAL)
-subprocess.run("python -m spacy download en_core_web_sm".split())
+# subprocess.run("python -m spacy download en_core_web_sm".split())
 
 def configure_logger(log_dir, wandb):
     logger.configure(log_dir, format_strs=['log'])
@@ -72,11 +72,11 @@ def train(agent, eval_env, envs, max_steps, update_freq, eval_freq, checkpoint_f
     states = agent.build_states(obs, infos)
     valid_ids = [agent.encode(info['valid']) for info in infos]
     transitions = [[] for info in infos] 
-    for step in range(1, max_steps+1): 
+    from tqdm import trange
+    for step in trange(1, max_steps+1): 
         action_ids, action_idxs, action_values = agent.act(states, valid_ids, sample=True, eps=0.05 ** (step / max_steps))
         action_strs = [info['valid'][idx] for info, idx in zip(infos, action_idxs)]
         
-        # log envs[0] 
         examples = [(action, value) for action, value in zip(infos[0]['valid'], action_values[0].tolist())]
         examples = sorted(examples, key=lambda x: -x[1])
         log('State  {}: {}'.format(step, clean(obs[0] + infos[0]['inv'] + infos[0]['look'])))
@@ -111,6 +111,7 @@ def train(agent, eval_env, envs, max_steps, update_freq, eval_freq, checkpoint_f
                     for transition in transitions[i]:
                         agent.observe(transition, is_prior=True)
                 transitions[i] = []
+        # log('')
 
         states, valid_ids = next_states, next_valids
         if step % log_freq == 0:
@@ -188,8 +189,8 @@ def main():
     configure_logger(args.output_dir, args.wandb)
     agent = DRRN_Agent(args)
     agent.load(args.load) 
-    # cache = {'loc': set()} 
-    cache = None
+    cache = {'loc': set()} 
+    #cache = None
     if args.perturb:
         args.en2de = torch.hub.load('pytorch/fairseq', 'transformer.wmt19.en-de.single_model')
         args.de2en = torch.hub.load('pytorch/fairseq', 'transformer.wmt19.de-en.single_model')
@@ -202,6 +203,8 @@ def main():
     env = JerichoEnv(args.rom_path, args.seed, args.env_step_limit, get_valid=True, cache=cache, args=args)
     # envs = [JerichoEnv(args.rom_path, args.seed, args.env_step_limit, get_valid=True, cache=cache, args=args) for _ in range(args.num_envs)]
     envs = VecEnv(args.num_envs, env)
+    # from simple_env import SimpleEnv
+    # envs = SimpleEnv(envs)
     train(agent, env, envs, args.max_steps, args.update_freq, args.eval_freq, args.checkpoint_freq, args.log_freq, args.r_for)
 
 
