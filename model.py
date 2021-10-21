@@ -29,8 +29,8 @@ class DRRN(torch.nn.Module):
         self.act_scorer   = nn.Linear(hidden_dim, 1)
 
         self.obs_att = BiAttention(hidden_dim, 0.)
-        # self.look_att = BiAttention(hidden_dim, 0.)
-        # self.inv_att = BiAttention(hidden_dim, 0.)
+        self.look_att = BiAttention(hidden_dim, 0.)
+        self.inv_att = BiAttention(hidden_dim, 0.)
         self.att_scorer   = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, 1))
         
         self.state_encoder = nn.Linear(hidden_dim, hidden_dim)
@@ -89,6 +89,10 @@ class DRRN(torch.nn.Module):
         # Unpack
         out, _ = nn.utils.rnn.pad_packed_sequence(out)
         if not return_last:
+            out = out.index_select(1, idx_unsort)
+            # lengths = lengths.index_select(0, idx_unsort)
+            # print(out.sum(dim=-1)[lengths - 1, range(len(lengths))])
+            # print(out.sum(dim=-1)[torch.min(lengths, torch.tensor(out.size(0) - 1, dtype=torch.long, device=device)), range(len(lengths))])
             return out
         # Get the last step of each sequence
         idx = (lengths-1).view(-1,1).expand(len(lengths), out.size(2)).unsqueeze(0)
@@ -101,22 +105,32 @@ class DRRN(torch.nn.Module):
     def state_action_attention(self, state_batch, act_batch):
         state = State(*zip(*state_batch))
         obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
-        # look_out = self.packed_rnn(state.obs, self.look_encoder, return_last=False).transpose(0, 1)
-        # inv_out = self.packed_rnn(state.obs, self.inv_encoder, return_last=False).transpose(0, 1)
+        # look_out = self.packed_rnn(state.description, self.look_encoder, return_last=False).transpose(0, 1)
+        # inv_out = self.packed_rnn(state.inventory, self.inv_encoder, return_last=False).transpose(0, 1)
         act_sizes = [len(a) for a in act_batch]
         act_batch = list(itertools.chain.from_iterable(act_batch))
         act_out = self.packed_rnn(act_batch, self.act_encoder, return_last=False).transpose(0, 1)
         with torch.no_grad():
             act_mask = torch.zeros(act_out.shape[:-1], dtype=torch.float, device=device)
+            obs_mask = torch.zeros(obs_out.shape[:-1], dtype=torch.float, device=device)
             for i in range(len(act_batch)):
                 act_mask[i, :len(act_batch[i])] = 1
+            for i in range(len(state.obs)):
+                obs_mask[i, :len(state.obs[i])] = 1
+            # print(obs_out.shape, obs_mask.shape)
+
         # print(obs_out.shape, act_sizes)
         obs_out = torch.repeat_interleave(obs_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+        obs_mask = torch.repeat_interleave(obs_mask, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+        # print(obs_out.shape, obs_mask.shape)
         # look_out = torch.repeat_interleave(look_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
         # inv_out = torch.repeat_interleave(inv_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
         # obs_out = torch.cat([obs_out[i].repeat(j, 1, 1) for i, j in enumerate(act_sizes)], dim=0)
         # print(obs_out.shape, act_out.shape)
-        obs_out = self.obs_att(obs_out, act_out, act_mask)[:, -1, :]
+        obs_out = self.obs_att(obs_out, act_out, act_mask)
+        # print(torch.abs(obs_out * obs_mask[..., None]).sum() / obs_mask[..., None].sum())
+        # print(torch.abs(obs_out * (1 - obs_mask[..., None])).sum() / (1 - obs_mask[..., None]).sum())
+        obs_out = (obs_out * obs_mask[..., None]).sum(dim=1) / obs_mask[..., None].sum(dim=1)
         # look_out = self.look_att(look_out, act_out, act_mask)[:, -1, :]
         # inv_out = self.inv_att(inv_out, act_out, act_mask)[:, -1, :]
         # score = self.att_scorer(torch.cat((obs_out, look_out, inv_out), dim=-1)).squeeze(-1)
@@ -132,6 +146,7 @@ class DRRN(torch.nn.Module):
         # Encode the various aspects of the state
         with torch.set_grad_enabled(not self.fix_rep):
             obs_out = self.packed_rnn(state.obs, self.obs_encoder)
+            return obs_out
             if self.act_obs: return obs_out
             look_out = self.packed_rnn(state.description, self.look_encoder)
             inv_out = self.packed_rnn(state.inventory, self.inv_encoder)
@@ -159,20 +174,35 @@ class DRRN(torch.nn.Module):
     def inv_predict(self, state_batch, next_state_batch):
         state = State(*zip(*state_batch))
         obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
-        next_state = State(*zip(*state_batch))
+        # look_out = self.packed_rnn(state.description, self.look_encoder, return_last=False).transpose(0, 1)
+        # inv_out = self.packed_rnn(state.inventory, self.inv_encoder, return_last=False).transpose(0, 1)
+        # state_out = torch.cat((obs_out, look_out, inv_out), dim=1)
+        state_out = obs_out
+        next_state = State(*zip(*next_state_batch))
         next_obs_out = self.packed_rnn(next_state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
+        # next_look_out = self.packed_rnn(next_state.description, self.look_encoder, return_last=False).transpose(0, 1)
+        # next_inv_out = self.packed_rnn(next_state.inventory, self.inv_encoder, return_last=False).transpose(0, 1)
+        # next_state_out = torch.cat((next_obs_out, next_look_out, next_inv_out), dim=1)
+        next_state_out = next_obs_out
         with torch.no_grad():
-            next_obs_mask = torch.zeros(next_obs_out.shape[:-1], dtype=torch.float, device=device)
+            state_mask = torch.zeros(state_out.shape[:-1], dtype=torch.float, device=device)
+            for i in range(len(state_batch)):
+                state_mask[i, :len(state.obs[i])] = 1
+            next_state_mask = torch.zeros(next_state_out.shape[:-1], dtype=torch.float, device=device)
             for i in range(len(next_state_batch)):
-                next_obs_mask[i, :len(next_state_batch[i])] = 1
+                next_state_mask[i, :len(next_state.obs[i])] = 1
+                # next_state_mask[i, next_obs_out.shape[1]:next_obs_out.shape[1]+len(next_state.description[i])] = 1
+                # next_state_mask[i, next_obs_out.shape[1]+next_look_out.shape[1]:next_obs_out.shape[1]+next_look_out.shape[1]+len(next_state.inventory[i])] = 1
         # print(obs_out.shape, next_obs_out.shape)
-        obs_out = self.inverse_dynamics_att(obs_out, next_obs_out, next_obs_mask)[:, -1, :]
+        state_out = self.inverse_dynamics_att(state_out, next_state_out, next_state_mask)
+        state_out = (state_out * state_mask[..., None]).sum(dim=1) / state_mask[..., None].sum(dim=1)
         # print(obs_out.shape)
-        obs_out = self.inverse_dynamics_lin(obs_out)
-        return obs_out
+        state_out = self.inverse_dynamics_lin(state_out)
+        return state_out
 
         state_out = self.state_rep(state_batch)
         next_state_out = self.state_rep(next_state_batch)
+        # print(state_out.shape, next_state_out.shape)
         # print(torch.cat((state_out, next_state_out - state_out), dim=1).shape)
         act_out = self.inverse_dynamics(torch.cat((state_out, next_state_out - state_out), dim=1))
         return act_out
