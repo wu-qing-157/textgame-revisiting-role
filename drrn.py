@@ -45,7 +45,7 @@ class DRRN_Agent:
             obs_ids, look_ids, inv_ids = [], [], []
             for act in acts: obs_ids += act
             return State(obs_ids, look_ids, inv_ids)
-        obs_ids = self.tokenizer.encode(ob + ' [SEP] ' + info['look'] + ' [SEP] ' + info['inv'])
+        obs_ids = self.tokenizer.encode(ob)
         look_ids = self.tokenizer.encode(info['look'])
         inv_ids = self.tokenizer.encode(info['inv'])
         return State(obs_ids, look_ids, inv_ids) 
