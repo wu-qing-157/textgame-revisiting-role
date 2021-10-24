@@ -180,6 +180,8 @@ def parse_args():
     parser.add_argument('--hash_rep', default=0, type=int, help='hash for representation') 
     parser.add_argument('--act_obs', default=0, type=int, help='action set as state representation') 
     parser.add_argument('--fix_rep', default=0, type=int, help='fix representation') 
+    parser.add_argument('--inv_att', action='store_true')
+    parser.add_argument('--q_att', action='store_true')
     return parser.parse_known_args()[0]
 
 
