@@ -160,12 +160,12 @@ class JerichoEnv:
             ob = self.paraphrase(ob)
             info['look'] = self.paraphrase(info['look'])
             info['inv'] = self.paraphrase(info['inv'])
-        info['state_hash'] = self.last_look_hash() #self.env.get_world_state_hash()
+        info['state_hash'] = self.last_look_hash(location, info['inv']) #self.env.get_world_state_hash()
         return ob, reward, done, info
     
-    def last_look_hash(self):
+    def last_look_hash(self, location, inventory):
         # print(tuple(v for _, v in sorted(self.last_look.items())))
-        return hash(tuple(v for _, v in sorted(self.last_look.items())))
+        return hash(tuple(v for _, v in sorted(self.last_look.items())) + (location, inventory))
 
     def reset(self):
         initial_ob, info = self.env.reset()
@@ -191,7 +191,7 @@ class JerichoEnv:
         if location in ['forest', 'clearing']:
             location = info['look'].split('\n')[1]
         self.last_look[location] = hash(info['look'])
-        info['state_hash'] = self.last_look_hash() #self.env.get_world_state_hash()
+        info['state_hash'] = self.last_look_hash(location, info['inv']) #self.env.get_world_state_hash()
         return initial_ob, info
 
     def get_dictionary(self):
