@@ -3,6 +3,8 @@ from jericho.util import *
 from jericho.defines import *
 import numpy as np
 import torch
+from collections import deque, defaultdict
+import json
 
 
 def modify(info):
@@ -54,6 +56,8 @@ class JerichoEnv:
             self.en2de = args.en2de 
             self.de2en = args.de2en 
             self.perturb_dict = args.perturb_dict
+        # self.ram_bytes = defaultdict(lambda: set())
+        # self.stack_bytes = defaultdict(lambda: set())
     
     def paraphrase(self, s):
         if s in self.perturb_dict: return self.perturb_dict[s]
@@ -73,6 +77,11 @@ class JerichoEnv:
         return list(obj_set)
 
     def step(self, action):
+        # if not self.walkthrough:
+        #     with open('ram_bytes.json', 'w') as f:
+        #         for i, l in sorted((int(i), sorted(map(int, j))) for i, j in self.ram_bytes.items()):
+        #             print(str(i), ':', ' '.join(map(str, l)), file=f)
+        # action = self.walkthrough.popleft()
         ob, reward, done, info = self.env.step(action)
         # if self.cache is not None:
         #     self.cache['loc'].add(self.env.get_player_location().num)
@@ -94,6 +103,25 @@ class JerichoEnv:
         info['valid'] = ['wait', 'yes', 'no']
         if not done:
             save = self.env.get_state()
+            # for i in np.nonzero(self.last_ram != save[0])[0]:
+            #     self.ram_bytes[i].update((self.last_ram[i], save[0][i]))
+            # # print(self.env.get_score(), len(self.ram_bytes), sorted(self.ram_bytes), sorted(self.stack_bytes), save[1][0])
+            # for i in range(len(self.env.get_world_objects())):
+            #     if tuple(self.properties[i]) != tuple(self.env.get_world_objects()[i].properties):
+            #         print(''.join(str(p) for p in self.properties[i]))
+            #         print(''.join(str(p) for p in self.env.get_world_objects()[i].properties))
+            #         self.properties[i] = self.env.get_world_objects()[i].properties
+            # for i in range(len(self.env.get_world_objects())):
+            #     if np.nonzero(self.attributes[i])[0].tolist() != np.nonzero(self.env.get_world_objects()[i].attr)[0].tolist():
+            #         print(self.env.get_world_objects()[i].name)
+            #         print(np.nonzero(self.attributes[i])[0].tolist(), np.nonzero(self.env.get_world_objects()[i].attr)[0].tolist())
+            #         self.attributes[i] = self.env.get_world_objects()[i].attr
+            # with open('object.txt', 'a') as f:
+            #     for i in self.env.get_world_objects():
+            #         print(i, file=f)
+            #     print('====', file=f)
+            # self.last_ram = save[0]
+            # self.last_stack = save[1]
             hash_save = self.env.get_world_state_hash() 
             if self.cache is not None and hash_save in self.cache:
                 info['look'], info['inv'], info['valid'] = self.cache[hash_save]
@@ -111,6 +139,17 @@ class JerichoEnv:
                     info['valid'] = valid
                 if self.cache is not None:
                     self.cache[hash_save] = info['look'], info['inv'], info['valid'] 
+        # with open('traj.txt', 'a') as f:
+        #     print(f'Step {self.steps} | Score {self.env.get_score()}', file=f)
+        #     print(ob, file=f, end='')
+        #     print(info['look'], file=f, end='')
+        #     print(info['inv'], file=f, end='')
+        #     print('====', file=f)
+
+        location = info['look'].split('\n')[0]
+        if location in ['forest', 'clearing']:
+            location = info['look'].split('\n')[1]
+        self.last_look[location] = hash(info['look'])
 
         self.steps += 1
         if self.step_limit and self.steps >= self.step_limit:
@@ -121,11 +160,21 @@ class JerichoEnv:
             ob = self.paraphrase(ob)
             info['look'] = self.paraphrase(info['look'])
             info['inv'] = self.paraphrase(info['inv'])
+        info['state_hash'] = self.last_look_hash() #self.env.get_world_state_hash()
         return ob, reward, done, info
+    
+    def last_look_hash(self):
+        # print(tuple(v for _, v in sorted(self.last_look.items())))
+        return hash(tuple(v for _, v in sorted(self.last_look.items())))
 
     def reset(self):
         initial_ob, info = self.env.reset()
         save = self.env.get_state()
+        # self.last_ram = save[0]
+        # self.last_stack = save[1]
+        self.walkthrough = deque(self.env.get_walkthrough())
+        # self.properties = [i.properties for i in self.env.get_world_objects()]
+        # self.attributes = [i.attr for i in self.env.get_world_objects()]
         look, _, _, _ = self.env.step('look')
         info['look'] = look
         self.env.set_state(save)
@@ -137,6 +186,12 @@ class JerichoEnv:
         self.steps = 0
         self.max_score = 0
         self.objs = set()
+        self.last_look = {}
+        location = info['look'].split('\n')[0]
+        if location in ['forest', 'clearing']:
+            location = info['look'].split('\n')[1]
+        self.last_look[location] = hash(info['look'])
+        info['state_hash'] = self.last_look_hash() #self.env.get_world_state_hash()
         return initial_ob, info
 
     def get_dictionary(self):

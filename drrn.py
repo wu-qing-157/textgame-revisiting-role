@@ -48,7 +48,7 @@ class DRRN_Agent:
         obs_ids = self.tokenizer.encode(ob + ' [SEP] ' + info['look'] + ' [SEP] ' + info['inv'])
         look_ids = self.tokenizer.encode(info['look'])
         inv_ids = self.tokenizer.encode(info['inv'])
-        return State(obs_ids, look_ids, inv_ids) 
+        return State(obs_ids, look_ids, inv_ids, info['state_hash']) 
     
 
     def build_states(self, obs, infos):

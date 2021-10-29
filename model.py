@@ -31,7 +31,7 @@ class DRRN(torch.nn.Module):
         self.obs_att = BiAttention(hidden_dim, 0.)
         self.look_att = BiAttention(hidden_dim, 0.)
         self.inv_att = BiAttention(hidden_dim, 0.)
-        self.att_scorer   = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, 1))
+        self.att_scorer   = nn.Sequential(nn.Linear(hidden_dim * 5, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, 1))
         
         self.state_encoder = nn.Linear(hidden_dim, hidden_dim)
         self.inverse_dynamics = nn.Sequential(nn.Linear(hidden_dim * 2, hidden_dim * 2), nn.ReLU(), nn.Linear(hidden_dim * 2, hidden_dim)) 
@@ -65,6 +65,10 @@ class DRRN(torch.nn.Module):
                 self.hash_cache[data] = a
         y = torch.stack(y, dim=0).to(device)
         return y
+    
+    def packed_state_hash(self, x):
+        y = [self.hash_cache.setdefault(hash(data), torch.zeros(self.hidden_dim).normal_(generator=torch.random.manual_seed(hash(data)))) for data in x]
+        return torch.stack(y, dim=0).to(device)
 
     def packed_rnn(self, x, rnn, return_last=True):
         """ Runs the provided rnn on the input x. Takes care of packing/unpacking.
@@ -124,7 +128,13 @@ class DRRN(torch.nn.Module):
         obs_mask = torch.repeat_interleave(obs_mask, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
         obs_out = self.obs_att(obs_out, act_out, act_mask)
         obs_out = (obs_out * obs_mask[..., None]).sum(dim=1) / obs_mask[..., None].sum(dim=1)
-        score = self.att_scorer(obs_out).squeeze(-1)
+
+        hash_out = self.packed_state_hash(state.state_hash)
+        hash_out = torch.repeat_interleave(hash_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+
+        state_out = torch.cat((obs_out, hash_out), dim=-1)
+
+        score = self.att_scorer(state_out).squeeze(-1)
         score = torch.split(score, act_sizes)
         return score
     
