@@ -56,6 +56,7 @@ class JerichoEnv:
             self.en2de = args.en2de 
             self.de2en = args.de2en 
             self.perturb_dict = args.perturb_dict
+        self.state_hash = args.state_hash
         # self.ram_bytes = defaultdict(lambda: set())
         # self.stack_bytes = defaultdict(lambda: set())
     
@@ -146,9 +147,10 @@ class JerichoEnv:
         #     print(info['inv'], file=f, end='')
         #     print('====', file=f)
 
-        location = info['look'].split('\n')[0]
-        if location in ['forest', 'clearing']:
-            location = info['look'].split('\n')[1]
+        # location = info['look'].split('\n')[0]
+        # if location in ['forest', 'clearing']:
+        #     location = info['look'].split('\n')[1]
+        location = int(self.env.get_player_location().num)
         self.last_look[location] = hash(info['look'])
 
         self.steps += 1
@@ -160,7 +162,12 @@ class JerichoEnv:
             ob = self.paraphrase(ob)
             info['look'] = self.paraphrase(info['look'])
             info['inv'] = self.paraphrase(info['inv'])
-        info['state_hash'] = self.last_look_hash(location, info['inv']) #self.env.get_world_state_hash()
+        self.hash_dict = defaultdict(lambda: set())
+        look_hash = self.last_look_hash(location, info['inv'])
+        state_hash = self.env.get_world_state_hash()
+        info['state_hash'] = state_hash if self.state_hash else look_hash
+        with open('hash_location_gt.log', 'a') as f:
+            print(f'{state_hash},{look_hash},{action},{location}', file=f)
         return ob, reward, done, info
     
     def last_look_hash(self, location, inventory):
@@ -176,10 +183,10 @@ class JerichoEnv:
         # self.properties = [i.properties for i in self.env.get_world_objects()]
         # self.attributes = [i.attr for i in self.env.get_world_objects()]
         look, _, _, _ = self.env.step('look')
-        info['look'] = look
+        info['look'] = look.lower()
         self.env.set_state(save)
         inv, _, _, _ = self.env.step('inventory')
-        info['inv'] = inv
+        info['inv'] = inv.lower()
         self.env.set_state(save)
         valid = self.env.get_valid_actions()
         info['valid'] = valid
@@ -187,11 +194,17 @@ class JerichoEnv:
         self.max_score = 0
         self.objs = set()
         self.last_look = {}
-        location = info['look'].split('\n')[0]
-        if location in ['forest', 'clearing']:
-            location = info['look'].split('\n')[1]
+        # location = info['look'].split('\n')[0]
+        # if location in ['forest', 'clearing']:
+        #     location = info['look'].split('\n')[1]
+        location = int(self.env.get_player_location().num)
         self.last_look[location] = hash(info['look'])
-        info['state_hash'] = self.last_look_hash(location, info['inv']) #self.env.get_world_state_hash()
+        self.hash_dict = defaultdict(lambda: set())
+        look_hash = self.last_look_hash(location, info['inv'])
+        state_hash = self.env.get_world_state_hash()
+        info['state_hash'] = state_hash if self.state_hash else look_hash
+        with open('hash_location_gt.log', 'a') as f:
+            print(f'{state_hash},{look_hash},reset,{location}', file=f)
         return initial_ob, info
 
     def get_dictionary(self):
