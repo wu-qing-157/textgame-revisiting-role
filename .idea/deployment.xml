@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="chuangg@ibm-tdw3:22 agent" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="MVIG Video">
         <serverdata>
@@ -79,6 +79,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="chuangg@ibm-tdw3:22 agent (1)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/disk2/chuangg/blindfold-textgame" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="chuangg@ibm-tdw5:22 agent">
         <serverdata>
           <mappings>
@@ -122,5 +129,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

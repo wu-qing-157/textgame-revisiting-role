@@ -53,10 +53,11 @@ class JerichoEnv:
         self.objs = set()
         self.perturb = args.perturb
         if self.perturb:
-            self.en2de = args.en2de 
-            self.de2en = args.de2en 
+            self.en2de = args.en2de
+            self.de2en = args.de2en
             self.perturb_dict = args.perturb_dict
-        self.state_hash = args.state_hash
+        self.use_gt_state_hash = args.use_gt_state
+        self.use_gt_room = args.use_gt_room
         # self.ram_bytes = defaultdict(lambda: set())
         # self.stack_bytes = defaultdict(lambda: set())
     
@@ -104,25 +105,6 @@ class JerichoEnv:
         info['valid'] = ['wait', 'yes', 'no']
         if not done:
             save = self.env.get_state()
-            # for i in np.nonzero(self.last_ram != save[0])[0]:
-            #     self.ram_bytes[i].update((self.last_ram[i], save[0][i]))
-            # # print(self.env.get_score(), len(self.ram_bytes), sorted(self.ram_bytes), sorted(self.stack_bytes), save[1][0])
-            # for i in range(len(self.env.get_world_objects())):
-            #     if tuple(self.properties[i]) != tuple(self.env.get_world_objects()[i].properties):
-            #         print(''.join(str(p) for p in self.properties[i]))
-            #         print(''.join(str(p) for p in self.env.get_world_objects()[i].properties))
-            #         self.properties[i] = self.env.get_world_objects()[i].properties
-            # for i in range(len(self.env.get_world_objects())):
-            #     if np.nonzero(self.attributes[i])[0].tolist() != np.nonzero(self.env.get_world_objects()[i].attr)[0].tolist():
-            #         print(self.env.get_world_objects()[i].name)
-            #         print(np.nonzero(self.attributes[i])[0].tolist(), np.nonzero(self.env.get_world_objects()[i].attr)[0].tolist())
-            #         self.attributes[i] = self.env.get_world_objects()[i].attr
-            # with open('object.txt', 'a') as f:
-            #     for i in self.env.get_world_objects():
-            #         print(i, file=f)
-            #     print('====', file=f)
-            # self.last_ram = save[0]
-            # self.last_stack = save[1]
             hash_save = self.env.get_world_state_hash() 
             if self.cache is not None and hash_save in self.cache:
                 info['look'], info['inv'], info['valid'] = self.cache[hash_save]
@@ -139,19 +121,7 @@ class JerichoEnv:
                         valid = ['wait', 'yes', 'no']
                     info['valid'] = valid
                 if self.cache is not None:
-                    self.cache[hash_save] = info['look'], info['inv'], info['valid'] 
-        # with open('traj.txt', 'a') as f:
-        #     print(f'Step {self.steps} | Score {self.env.get_score()}', file=f)
-        #     print(ob, file=f, end='')
-        #     print(info['look'], file=f, end='')
-        #     print(info['inv'], file=f, end='')
-        #     print('====', file=f)
-
-        # location = info['look'].split('\n')[0]
-        # if location in ['forest', 'clearing']:
-        #     location = info['look'].split('\n')[1]
-        location = int(self.env.get_player_location().num)
-        self.last_look[location] = hash(info['look'])
+                    self.cache[hash_save] = info['look'], info['inv'], info['valid']
 
         self.steps += 1
         if self.step_limit and self.steps >= self.step_limit:
@@ -162,12 +132,17 @@ class JerichoEnv:
             ob = self.paraphrase(ob)
             info['look'] = self.paraphrase(info['look'])
             info['inv'] = self.paraphrase(info['inv'])
-        self.hash_dict = defaultdict(lambda: set())
-        look_hash = self.last_look_hash(location, info['inv'])
-        state_hash = self.env.get_world_state_hash()
-        info['state_hash'] = state_hash if self.state_hash else look_hash
-        with open('hash_location_gt.log', 'a') as f:
-            print(f'{state_hash},{look_hash},{action},{location}', file=f)
+
+        if not self.use_gt_state_hash:
+            if self.use_gt_room:
+                location = int(self.env.get_player_location().num)
+            else:
+                location = info['look'].split('\n')[0]
+            self.last_look[location] = hash(info['look'])
+            info['state_hash'] = self.last_look_hash(location, info['inv'])
+        else:
+            info['state_hash'] = self.env.get_world_state_hash()
+
         return ob, reward, done, info
     
     def last_look_hash(self, location, inventory):
@@ -177,11 +152,7 @@ class JerichoEnv:
     def reset(self):
         initial_ob, info = self.env.reset()
         save = self.env.get_state()
-        # self.last_ram = save[0]
-        # self.last_stack = save[1]
         self.walkthrough = deque(self.env.get_walkthrough())
-        # self.properties = [i.properties for i in self.env.get_world_objects()]
-        # self.attributes = [i.attr for i in self.env.get_world_objects()]
         look, _, _, _ = self.env.step('look')
         info['look'] = look.lower()
         self.env.set_state(save)
@@ -194,17 +165,17 @@ class JerichoEnv:
         self.max_score = 0
         self.objs = set()
         self.last_look = {}
-        # location = info['look'].split('\n')[0]
-        # if location in ['forest', 'clearing']:
-        #     location = info['look'].split('\n')[1]
-        location = int(self.env.get_player_location().num)
-        self.last_look[location] = hash(info['look'])
-        self.hash_dict = defaultdict(lambda: set())
-        look_hash = self.last_look_hash(location, info['inv'])
-        state_hash = self.env.get_world_state_hash()
-        info['state_hash'] = state_hash if self.state_hash else look_hash
-        with open('hash_location_gt.log', 'a') as f:
-            print(f'{state_hash},{look_hash},reset,{location}', file=f)
+
+        if not self.use_gt_state_hash:
+            if self.use_gt_room:
+                location = int(self.env.get_player_location().num)
+            else:
+                location = info['look'].split('\n')[0]
+            self.last_look[location] = hash(info['look'])
+            info['state_hash'] = self.last_look_hash(location, info['inv'])
+        else:
+            info['state_hash'] = self.env.get_world_state_hash()
+
         return initial_ob, info
 
     def get_dictionary(self):

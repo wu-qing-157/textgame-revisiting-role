@@ -182,8 +182,9 @@ def parse_args():
     parser.add_argument('--fix_rep', default=0, type=int, help='fix representation') 
     parser.add_argument('--inv_att', action='store_true')
     parser.add_argument('--q_att', action='store_true')
-    parser.add_argument('--state_hash', action='store_true')
-    return parser.parse_known_args()[0]
+    parser.add_argument('--use_gt_state', action='store_true')
+    parser.add_argument('--use_gt_room', action='store_true')
+    return parser.parse_args()
 
 
 def main():
