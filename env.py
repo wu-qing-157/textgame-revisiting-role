@@ -56,8 +56,10 @@ class JerichoEnv:
             self.en2de = args.en2de
             self.de2en = args.de2en
             self.perturb_dict = args.perturb_dict
+        self.last_look = {}
         self.use_gt_state_hash = args.use_gt_state
         self.use_gt_room = args.use_gt_room
+        self.use_nearby_room = args.use_nearby_room
         # self.ram_bytes = defaultdict(lambda: set())
         # self.stack_bytes = defaultdict(lambda: set())
     
@@ -77,6 +79,48 @@ class JerichoEnv:
                 if pos == 'ADJ': continue
                 obj_set.add(obj)
         return list(obj_set)
+
+    @staticmethod
+    def get_room(look):
+        room = look.split('\n')[0].strip()
+        if '.' in room or not room:
+            room = 'unknown'
+        return room
+
+    def get_nearby(self, depth=1):
+        state = self.env.get_state()
+        valid = self.env.get_valid_actions(state)
+        navis = 'north/south/west/east/northwest/southwest/northeast/southeast/up/down'.split('/')
+        result = []
+        for act in navis:  # ensure the order of acts in different states
+            if act in valid:
+                self.env.step(act)
+                next_state = self.env.get_state()
+                look, _, _, _ = self.env.step('look')
+                self.env.set_state(next_state)
+                room = self.get_room(look.lower())
+                if depth > 1 and room != 'unknown':
+                    result.append((act, room, self.get_nearby(depth - 1)))
+                else:
+                    result.append((act, room))
+                self.env.set_state(state)
+        return tuple(result)
+
+    def last_look_hash(self, location, inventory):
+        return hash(tuple(sorted(self.last_look.items())) + (location, inventory))
+
+    def get_state_hash(self, look, inv):
+        if self.use_gt_state_hash:
+            return self.env.get_world_state_hash()
+        else:
+            if self.use_gt_room:
+                location = int(self.env.get_player_location().num)
+            elif self.use_nearby_room:
+                location = (self.get_room(look), self.get_nearby(depth=self.use_nearby_room))
+            else:
+                location = self.get_room(look)
+            self.last_look[location] = hash(look)
+        return self.last_look_hash(location, inv)
 
     def step(self, action):
         # if not self.walkthrough:
@@ -132,22 +176,8 @@ class JerichoEnv:
             ob = self.paraphrase(ob)
             info['look'] = self.paraphrase(info['look'])
             info['inv'] = self.paraphrase(info['inv'])
-
-        if not self.use_gt_state_hash:
-            if self.use_gt_room:
-                location = int(self.env.get_player_location().num)
-            else:
-                location = info['look'].split('\n')[0]
-            self.last_look[location] = hash(info['look'])
-            info['state_hash'] = self.last_look_hash(location, info['inv'])
-        else:
-            info['state_hash'] = self.env.get_world_state_hash()
-
+        info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         return ob, reward, done, info
-    
-    def last_look_hash(self, location, inventory):
-        # print(tuple(v for _, v in sorted(self.last_look.items())))
-        return hash(tuple(v for _, v in sorted(self.last_look.items())) + (location, inventory))
 
     def reset(self):
         initial_ob, info = self.env.reset()
@@ -164,18 +194,8 @@ class JerichoEnv:
         self.steps = 0
         self.max_score = 0
         self.objs = set()
-        self.last_look = {}
-
-        if not self.use_gt_state_hash:
-            if self.use_gt_room:
-                location = int(self.env.get_player_location().num)
-            else:
-                location = info['look'].split('\n')[0]
-            self.last_look[location] = hash(info['look'])
-            info['state_hash'] = self.last_look_hash(location, info['inv'])
-        else:
-            info['state_hash'] = self.env.get_world_state_hash()
-
+        self.last_look.clear()
+        info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         return initial_ob, info
 
     def get_dictionary(self):

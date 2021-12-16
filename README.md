@@ -11,17 +11,17 @@ Project site: https://blindfolded.cs.princeton.edu
 pip install jericho fasttext
 ```
 - Run baseline DRRN:
-```python
+```bash
 python train.py
 ```
 
 - Run DRRN (hash):
-```python
+```bash
 python train.py --hash_rep 1
 ```
 
 - Run DRRN (inv-dy):
-```python
+```bash
 python train.py --w_inv 1 --w_act 1 --r_for 1
 ```
 

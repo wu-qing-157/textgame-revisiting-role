@@ -184,6 +184,7 @@ def parse_args():
     parser.add_argument('--q_att', action='store_true')
     parser.add_argument('--use_gt_state', action='store_true')
     parser.add_argument('--use_gt_room', action='store_true')
+    parser.add_argument('--use_nearby_room', type=int)
     return parser.parse_args()
 
 
@@ -205,10 +206,10 @@ def main():
         args.perturb_dict = {}
 
     env = JerichoEnv(args.rom_path, args.seed, args.env_step_limit, get_valid=True, cache=cache, args=args)
-    # envs = [JerichoEnv(args.rom_path, args.seed, args.env_step_limit, get_valid=True, cache=cache, args=args) for _ in range(args.num_envs)]
-    envs = VecEnv(args.num_envs, env)
-    # from simple_env import SimpleEnv
-    # envs = SimpleEnv(envs)
+    # envs = VecEnv(args.num_envs, (args.rom_path, args.seed, args.env_step_limit, True, cache, args))
+    envs = [JerichoEnv(args.rom_path, args.seed, args.env_step_limit, get_valid=True, cache=cache, args=args) for _ in range(args.num_envs)]
+    from simple_env import SimpleEnv
+    envs = SimpleEnv(envs)
     train(agent, env, envs, args.max_steps, args.update_freq, args.eval_freq, args.checkpoint_freq, args.log_freq, args.r_for)
 
 
