@@ -60,6 +60,7 @@ class JerichoEnv:
         self.use_gt_state_hash = args.use_gt_state
         self.use_gt_room = args.use_gt_room
         self.use_nearby_room = args.use_nearby_room
+        self.log_dir = args.output_dir
         # self.ram_bytes = defaultdict(lambda: set())
         # self.stack_bytes = defaultdict(lambda: set())
     
@@ -117,6 +118,9 @@ class JerichoEnv:
                 location = int(self.env.get_player_location().num)
             elif self.use_nearby_room:
                 location = (self.get_room(look), self.get_nearby(depth=self.use_nearby_room))
+                with open(f'{self.log_dir}/location.log', 'a') as f:
+                    print(int(self.env.get_player_location().num), file=f)
+                    print(repr(location))
             else:
                 location = self.get_room(look)
             self.last_look[location] = hash(look)
