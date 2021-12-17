@@ -90,7 +90,7 @@ class JerichoEnv:
 
     def get_nearby(self, depth=1):
         state = self.env.get_state()
-        valid = self.env.get_valid_actions(state)
+        valid = self.env.get_valid_actions(state, use_ctypes=False)
         navis = 'north/south/west/east/northwest/southwest/northeast/southeast/up/down'.split('/')
         result = []
         for act in navis:  # ensure the order of acts in different states
@@ -164,7 +164,7 @@ class JerichoEnv:
                 info['inv'] = inv.lower()
                 self.env.set_state(save)
                 if self.get_valid:
-                    valid = self.env.get_valid_actions()
+                    valid = self.env.get_valid_actions(use_ctypes=False)
                     if len(valid) == 0:
                         valid = ['wait', 'yes', 'no']
                     info['valid'] = valid
@@ -193,7 +193,7 @@ class JerichoEnv:
         inv, _, _, _ = self.env.step('inventory')
         info['inv'] = inv.lower()
         self.env.set_state(save)
-        valid = self.env.get_valid_actions()
+        valid = self.env.get_valid_actions(use_ctypes=False)
         info['valid'] = valid
         self.steps = 0
         self.max_score = 0
