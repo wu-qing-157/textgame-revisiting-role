@@ -33,7 +33,7 @@ class DRRN(torch.nn.Module):
         self.inv_att = BiAttention(hidden_dim, 0.)
         self.att_scorer   = nn.Sequential(nn.Linear(hidden_dim * 5, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, 1))
         
-        self.state_encoder = nn.Linear(hidden_dim, hidden_dim)
+        self.state_encoder = nn.Linear(4 * hidden_dim, hidden_dim)
         self.inverse_dynamics = nn.Sequential(nn.Linear(hidden_dim * 2, hidden_dim * 2), nn.ReLU(), nn.Linear(hidden_dim * 2, hidden_dim)) 
         self.inverse_dynamics_att = BiAttention(hidden_dim, 0.)
         self.inverse_dynamics_lin = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, hidden_dim))
@@ -145,11 +145,12 @@ class DRRN(torch.nn.Module):
         # Encode the various aspects of the state
         with torch.set_grad_enabled(not self.fix_rep):
             obs_out = self.packed_rnn(state.obs, self.obs_encoder)
-            return obs_out
-            if self.act_obs: return obs_out
+            # return obs_out
+            # if self.act_obs: return obs_out
             look_out = self.packed_rnn(state.description, self.look_encoder)
             inv_out = self.packed_rnn(state.inventory, self.inv_encoder)
-            state_out = self.state_encoder(torch.cat((obs_out, look_out, inv_out), dim=1))
+            hash_out = self.packed_state_hash(state.state_hash)
+            state_out = self.state_encoder(torch.cat((obs_out, look_out, inv_out, hash_out), dim=1))
         return state_out
 
 
