@@ -39,10 +39,14 @@ class VecEnv:
         self.ps = [Process(target=worker, args=(work_remote, remote, env))
                    for (work_remote, remote) in zip(self.work_remotes, self.remotes)]
         for p in self.ps:
-            p.daemon = True  # if the main process crashes, we should not cause things to hang
+            # p.daemon = True  # if the main process crashes, we should not cause things to hang
             p.start()
         for remote in self.work_remotes:
             remote.close()
+
+    def __del__(self):
+        for p in self.ps:
+            p.kill()
 
     def step(self, actions):
         self._assert_not_closed()
