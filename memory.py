@@ -2,7 +2,7 @@ from collections import namedtuple
 import numpy as np
 import random 
 
-State = namedtuple('State', ('obs', 'description', 'inventory'))
+State = namedtuple('State', ('obs', 'description', 'inventory', 'state_hash'))
 Transition = namedtuple('Transition', ('state', 'act', 'reward', 'next_state', 'next_acts', 'done', 'acts'))
 
 

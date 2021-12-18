@@ -3,13 +3,14 @@ import os
 # games = ['zork1', 'inhumane', 'ludicorp', 'pentari', 'detective', 'balances', 'deephome', 'dragon']
 games = ['ludicorp', 'deephome', 'inhumane']
 run_types = [
-    # ('--use_gt_state', 'gt_state'),
+    ('--use_gt_state', 'gt_state'),
     # ('--use_gt_room', 'gt_room'),
     # ('--use_nearby_room=2', 'nearby'),
     # ('', 'look'),
-    ('', 'raw'),
+    # ('', 'raw'),
+    ('--use_gt_state --hash_only', 'gt_state-hash_only'),
 ]
-seeds = [1, 2, 3]
+seeds = [1, 2]
 
 cases = []
 cuda = 0

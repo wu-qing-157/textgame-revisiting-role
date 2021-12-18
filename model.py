@@ -16,7 +16,7 @@ class DRRN(torch.nn.Module):
         Deep Reinforcement Relevance Network - He et al. '16
 
     """
-    def __init__(self, vocab_size, embedding_dim, hidden_dim, fix_rep=0, hash_rep=0, act_obs=0):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, fix_rep=0, hash_rep=0, act_obs=0, hash_only=0):
         super(DRRN, self).__init__()
         self.hidden_dim = hidden_dim
         self.embedding    = nn.Embedding(vocab_size, embedding_dim)
@@ -28,7 +28,7 @@ class DRRN(torch.nn.Module):
         # self.hidden       = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.Linear(2 * hidden_dim, hidden_dim), nn.Linear(hidden_dim, hidden_dim))
         self.act_scorer   = nn.Linear(hidden_dim, 1)
         
-        self.state_encoder = nn.Linear(3 * hidden_dim, hidden_dim)
+        self.state_encoder = nn.Linear(hidden_dim if hash_only else 4 * hidden_dim, hidden_dim)
         self.inverse_dynamics = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.ReLU(), nn.Linear(2 * hidden_dim, hidden_dim)) 
         self.forward_dynamics = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.ReLU(), nn.Linear(2 * hidden_dim, hidden_dim)) 
         
@@ -41,6 +41,7 @@ class DRRN(torch.nn.Module):
         self.fix_rep = fix_rep
         self.hash_rep = hash_rep
         self.act_obs = act_obs
+        self.hash_only = hash_only
         self.hash_cache = {}
     
     def packed_hash(self, x):
@@ -94,11 +95,14 @@ class DRRN(torch.nn.Module):
         state = State(*zip(*state_batch))
         # Encode the various aspects of the state
         with torch.set_grad_enabled(not self.fix_rep):
+            if self.hash_only:
+                return self.packed_hash(state.state_hash)
             obs_out = self.packed_rnn(state.obs, self.obs_encoder)
             if self.act_obs: return obs_out
             look_out = self.packed_rnn(state.description, self.look_encoder)
             inv_out = self.packed_rnn(state.inventory, self.inv_encoder)
-            state_out = self.state_encoder(torch.cat((obs_out, look_out, inv_out), dim=1))
+            hash_out = self.packed_hash(state.state_hash)
+            state_out = self.state_encoder(torch.cat((obs_out, look_out, inv_out, hash_out), dim=1))
         return state_out
 
 
