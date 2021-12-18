@@ -71,7 +71,8 @@ def train(agent, eval_env, envs, max_steps, update_freq, eval_freq, checkpoint_f
     states = agent.build_states(obs, infos)
     valid_ids = [agent.encode(info['valid']) for info in infos]
     transitions = [[] for info in infos] 
-    for step in range(1, max_steps+1): 
+    from tqdm import trange
+    for step in trange(1, max_steps+1): 
         action_ids, action_idxs, action_values = agent.act(states, valid_ids, sample=True, eps=0.05 ** (step / max_steps))
         action_strs = [info['valid'][idx] for info, idx in zip(infos, action_idxs)]
         
