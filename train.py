@@ -16,7 +16,6 @@ from vec_env import VecEnv
 
 
 logging.getLogger().setLevel(logging.CRITICAL)
-subprocess.run("python -m spacy download en_core_web_sm".split())
 
 def configure_logger(log_dir, wandb):
     logger.configure(log_dir, format_strs=['log'])
