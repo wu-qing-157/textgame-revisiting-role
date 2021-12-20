@@ -126,7 +126,7 @@ class DRRN(torch.nn.Module):
         obs_out = self.obs_att(obs_out, act_out, act_mask)
         obs_out = (obs_out * obs_mask[..., None]).sum(dim=1) / obs_mask[..., None].sum(dim=1)
 
-        hash_out = self.packed_state_hash(state.state_hash)
+        hash_out = self.packed_hash(state.state_hash)
         hash_out = torch.repeat_interleave(hash_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
 
         state_out = torch.cat((obs_out, hash_out, act_out), dim=-1)
