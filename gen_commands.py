@@ -1,14 +1,16 @@
 import os
 
 # games = ['zork1', 'inhumane', 'ludicorp', 'pentari', 'detective', 'balances', 'deephome', 'dragon']
-games = ['ludicorp', 'deephome', 'inhumane']
+games = ['zork1', 'ludicorp', 'deephome', 'inhumane']
 run_types = [
+    ('--use_q_att --use_inv_att --use_gt_state', 'att-gt_state'),
+    ('--use_q_att --use_inv_att --use_gt_room', 'att-gt_room'),
     ('--use_gt_state', 'gt_state'),
-    # ('--use_gt_room', 'gt_room'),
+    ('--use_gt_room', 'gt_room')
     # ('--use_nearby_room=2', 'nearby'),
     # ('', 'look'),
     # ('', 'raw'),
-    ('--use_gt_state --hash_only', 'gt_state-hash_only'),
+    # ('--use_gt_state --hash_only', 'gt_state-hash_only'),
 ]
 seeds = [1, 2]
 

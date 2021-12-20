@@ -170,10 +170,29 @@ class DRRN(torch.nn.Module):
 
 
     def inv_predict(self, state_batch, next_state_batch):
-        state_out = self.state_rep(state_batch)
-        next_state_out = self.state_rep(next_state_batch)
-        act_out = self.inverse_dynamics(torch.cat((state_out, next_state_out - state_out), dim=1))
-        return act_out
+        if self.use_inv_att:
+            state = State(*zip(*state_batch))
+            obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
+            state_out = obs_out
+            next_state = State(*zip(*next_state_batch))
+            next_obs_out = self.packed_rnn(next_state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
+            next_state_out = next_obs_out
+            with torch.no_grad():
+                state_mask = torch.zeros(state_out.shape[:-1], dtype=torch.float, device=device)
+                for i in range(len(state_batch)):
+                    state_mask[i, :len(state.obs[i])] = 1
+                next_state_mask = torch.zeros(next_state_out.shape[:-1], dtype=torch.float, device=device)
+                for i in range(len(next_state_batch)):
+                    next_state_mask[i, :len(next_state.obs[i])] = 1
+            state_out = self.inverse_dynamics_att(state_out, next_state_out, next_state_mask)
+            state_out = (state_out * state_mask[..., None]).sum(dim=1) / state_mask[..., None].sum(dim=1)
+            state_out = self.inverse_dynamics_lin(state_out)
+            return state_out
+        else:
+            state_out = self.state_rep(state_batch)
+            next_state_out = self.state_rep(next_state_batch)
+            act_out = self.inverse_dynamics(torch.cat((state_out, next_state_out - state_out), dim=1))
+            return act_out
     
 
     def inv_loss_l1(self, state_batch, next_state_batch, acts):
@@ -306,6 +325,8 @@ class DRRN(torch.nn.Module):
 
 
     def forward(self, state_batch, act_batch):
+        if self.use_q_att:
+            return self.state_action_attention(state_batch, act_batch)
         """
             Batched forward pass.
             obs_id_batch: iterable of unpadded sequence ids
