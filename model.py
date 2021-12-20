@@ -16,7 +16,7 @@ class DRRN(torch.nn.Module):
         Deep Reinforcement Relevance Network - He et al. '16
 
     """
-    def __init__(self, vocab_size, embedding_dim, hidden_dim, fix_rep=0, hash_rep=0, act_obs=0, hash_only=0):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, fix_rep=0, hash_rep=0, act_obs=0, hash_only=0, use_q_att=0, use_inv_att=0):
         super(DRRN, self).__init__()
         self.hidden_dim = hidden_dim
         self.embedding    = nn.Embedding(vocab_size, embedding_dim)
@@ -27,7 +27,14 @@ class DRRN(torch.nn.Module):
         self.hidden       = nn.Linear(2 * hidden_dim, hidden_dim)
         # self.hidden       = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.Linear(2 * hidden_dim, hidden_dim), nn.Linear(hidden_dim, hidden_dim))
         self.act_scorer   = nn.Linear(hidden_dim, 1)
-        
+
+        self.obs_att = BiAttention(hidden_dim, 0.)
+        self.look_att = BiAttention(hidden_dim, 0.)
+        self.inv_att = BiAttention(hidden_dim, 0.)
+        self.att_scorer = nn.Sequential(nn.Linear(hidden_dim * 6, hidden_dim * 4), nn.LeakyReLU(), nn.Linear(hidden_dim * 4, 1))
+        self.inverse_dynamics_att = BiAttention(hidden_dim, 0.)
+        self.inverse_dynamics_lin = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, hidden_dim))
+
         self.state_encoder = nn.Linear(hidden_dim if hash_only else 4 * hidden_dim, hidden_dim)
         self.inverse_dynamics = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.ReLU(), nn.Linear(2 * hidden_dim, hidden_dim)) 
         self.forward_dynamics = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.ReLU(), nn.Linear(2 * hidden_dim, hidden_dim)) 
@@ -42,6 +49,8 @@ class DRRN(torch.nn.Module):
         self.hash_rep = hash_rep
         self.act_obs = act_obs
         self.hash_only = hash_only
+        self.use_q_att = use_q_att
+        self.use_inv_att = use_inv_att
         self.hash_cache = {}
     
     def packed_hash(self, x):
@@ -58,7 +67,7 @@ class DRRN(torch.nn.Module):
         y = torch.stack(y, dim=0).to(device)
         return y
 
-    def packed_rnn(self, x, rnn):
+    def packed_rnn(self, x, rnn, return_last=True):
         """ Runs the provided rnn on the input x. Takes care of packing/unpacking.
 
             x: list of unpadded input sequences
@@ -82,6 +91,12 @@ class DRRN(torch.nn.Module):
         out, _ = rnn(packed)
         # Unpack
         out, _ = nn.utils.rnn.pad_packed_sequence(out)
+        if not return_last:
+            out = out.index_select(1, idx_unsort)
+            # lengths = lengths.index_select(0, idx_unsort)
+            # print(out.sum(dim=-1)[lengths - 1, range(len(lengths))])
+            # print(out.sum(dim=-1)[torch.min(lengths, torch.tensor(out.size(0) - 1, dtype=torch.long, device=device)), range(len(lengths))])
+            return out
         # Get the last step of each sequence
         idx = (lengths-1).view(-1,1).expand(len(lengths), out.size(2)).unsqueeze(0)
         out = out.gather(0, idx).squeeze(0)
@@ -89,6 +104,37 @@ class DRRN(torch.nn.Module):
         out = out.index_select(0, idx_unsort)
         return out
     
+
+    def state_action_attention(self, state_batch, act_batch):
+        state = State(*zip(*state_batch))
+        obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
+        act_sizes = [len(a) for a in act_batch]
+        act_batch = list(itertools.chain.from_iterable(act_batch))
+        act_out = self.packed_rnn(act_batch, self.act_encoder, return_last=False).transpose(0, 1)
+        with torch.no_grad():
+            act_mask = torch.zeros(act_out.shape[:-1], dtype=torch.float, device=device)
+            obs_mask = torch.zeros(obs_out.shape[:-1], dtype=torch.float, device=device)
+            for i in range(len(act_batch)):
+                act_mask[i, :len(act_batch[i])] = 1
+            for i in range(len(state.obs)):
+                obs_mask[i, :len(state.obs[i])] = 1
+            # print(obs_out.shape, obs_mask.shape)
+
+        # print(obs_out.shape, act_sizes)
+        obs_out = torch.repeat_interleave(obs_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+        obs_mask = torch.repeat_interleave(obs_mask, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+        obs_out = self.obs_att(obs_out, act_out, act_mask)
+        obs_out = (obs_out * obs_mask[..., None]).sum(dim=1) / obs_mask[..., None].sum(dim=1)
+
+        hash_out = self.packed_state_hash(state.state_hash)
+        hash_out = torch.repeat_interleave(hash_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+
+        state_out = torch.cat((obs_out, hash_out, act_out), dim=-1)
+
+        score = self.att_scorer(state_out).squeeze(-1)
+        score = torch.split(score, act_sizes)
+        return score
+
 
     def state_rep(self, state_batch):
         # Zip the state_batch into an easy access format
@@ -290,3 +336,57 @@ class DRRN(torch.nn.Module):
         else:
             act_idxs = [vals.argmax(dim=0).item() if np.random.rand() > eps else np.random.randint(len(vals)) for vals in act_values]
         return act_idxs, act_values
+
+
+class BiAttention(nn.Module):
+    def __init__(self, input_size, dropout):
+        super().__init__()
+        self.dropout = LockedDropout(dropout)
+        self.input_linear = nn.Linear(input_size, 1, bias=False)
+        self.memory_linear = nn.Linear(input_size, 1, bias=False)
+        self.dot_scale = nn.Parameter(
+            torch.zeros(size=(input_size,)).uniform_(1. / (input_size ** 0.5)),
+            requires_grad=True)
+        self.init_parameters()
+
+    def init_parameters(self):
+        nn.init.xavier_uniform_(self.input_linear.weight.data, gain=0.1)
+        nn.init.xavier_uniform_(self.memory_linear.weight.data, gain=0.1)
+        return
+
+    def forward(self, context, memory, mask):
+        bsz, input_len = context.size(0), context.size(1)
+        memory_len = memory.size(1)
+        context = self.dropout(context)
+        memory = self.dropout(memory)
+
+        input_dot = self.input_linear(context)
+        memory_dot = self.memory_linear(memory).view(bsz, 1, memory_len)
+        cross_dot = torch.bmm(
+            context * self.dot_scale,
+            memory.permute(0, 2, 1).contiguous())
+        att = input_dot + memory_dot + cross_dot
+        att = att - 1e30 * (1 - mask[:, None])
+
+        weight_one = F.softmax(att, dim=-1)
+        output_one = torch.bmm(weight_one, memory)
+        weight_two = F.softmax(att.max(dim=-1)[0], dim=-1).view(bsz, 1, input_len)
+        output_two = torch.bmm(weight_two, context)
+        return torch.cat([context, output_one, context * output_one, output_two * output_one], dim=-1)
+
+
+class LockedDropout(nn.Module):
+    def __init__(self, dropout):
+        super().__init__()
+        self.dropout = dropout
+
+    def forward(self, x):
+        dropout = self.dropout
+        if not self.training:
+            return x
+        with torch.no_grad():
+            m = (x.data.new(size=(x.size(0), 1, x.size(2)))
+                 .bernoulli_(1 - dropout))
+            mask = m.div_(1 - dropout)
+            mask = mask.expand_as(x)
+        return mask * x
