@@ -56,7 +56,7 @@ class DRRN(torch.nn.Module):
     def packed_hash(self, x):
         y = []
         for data in x:
-            data = hash(tuple(data))
+            data = hash(data)
             if data in self.hash_cache:
                 y.append(self.hash_cache[data])
             else:
