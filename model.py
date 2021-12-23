@@ -28,6 +28,12 @@ class DRRN(torch.nn.Module):
         # self.hidden       = nn.Sequential(nn.Linear(2 * hidden_dim, 2 * hidden_dim), nn.Linear(2 * hidden_dim, hidden_dim), nn.Linear(hidden_dim, hidden_dim))
         self.act_scorer   = nn.Linear(hidden_dim, 1)
 
+        self.hash_linear = nn.Sequential(
+            nn.Linear(hidden_dim, hidden_dim), nn.LeakyReLU(),
+            nn.Linear(hidden_dim, hidden_dim), nn.LeakyReLU(),
+            nn.Linear(hidden_dim, hidden_dim),
+        )
+
         self.obs_att = BiAttention(hidden_dim, 0.)
         self.look_att = BiAttention(hidden_dim, 0.)
         self.inv_att = BiAttention(hidden_dim, 0.)
@@ -65,7 +71,7 @@ class DRRN(torch.nn.Module):
                 y.append(a)
                 self.hash_cache[data] = a
         y = torch.stack(y, dim=0).to(device)
-        return y
+        return self.hash_linear(y)
 
     def packed_rnn(self, x, rnn, return_last=True):
         """ Runs the provided rnn on the input x. Takes care of packing/unpacking.
