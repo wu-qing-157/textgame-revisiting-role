@@ -1,18 +1,19 @@
 import os
 
 # games = ['zork1', 'inhumane', 'ludicorp', 'pentari', 'detective', 'balances', 'deephome', 'dragon']
-games = ['zork1', 'ludicorp', 'deephome', 'inhumane']
+games = ['zork1', 'zork3', 'pentari', 'ludicorp', 'inhumane', 'detective', 'balances', 'omniquest', 'library']
 run_types = [
-    ('--use_q_att --use_inv_att --use_gt_state', 'att-gt_state'),
-    ('--use_q_att --use_inv_att --use_gt_room', 'att-gt_room'),
-    ('--use_gt_state', 'gt_state'),
-    ('--use_gt_room', 'gt_room')
-    # ('--use_nearby_room=2', 'nearby'),
+    # ('--use_q_att --use_inv_att --use_gt_state', 'att-gt_state'),
+    # ('--use_q_att --use_inv_att --use_gt_room', 'att-gt_room'),
+    # ('--use_gt_state', 'gt_state'),
+    # ('--use_gt_room', 'gt_room'),
+    ('--use_q_att --use_inv_att --use_nearby_room=2', 'nearby'),
+    ('--use_nearby_room=2', 'nearby'),
     # ('', 'look'),
     # ('', 'raw'),
     # ('--use_gt_state --hash_only', 'gt_state-hash_only'),
 ]
-seeds = [1, 2]
+seeds = [3]
 
 cases = []
 cuda = 0
@@ -30,5 +31,5 @@ for cuda, game, run_arg, run_name, seed in cases:
             break
     else:
         assert False, f'cannot find rom {game}'
-    command = f'CUDA_VISIBLE_DEVICES={cuda} python train.py --rom_path={rom_path} --w_inv=1 --w_act=1 --r_for=1 --seed={seed} {run_arg} --output_dir=logs_raw/{game}-{run_name}-{seed}'
+    command = f'CUDA_VISIBLE_DEVICES={cuda} python train.py --rom_path={rom_path} --w_inv=1 --w_act=1 --r_for=1 --seed={seed} {run_arg} --output_dir=logs_mlp/{game}-{run_name}-{seed}'
     print(command)

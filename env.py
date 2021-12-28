@@ -94,17 +94,16 @@ class JerichoEnv:
         navis = 'north/south/west/east/northwest/southwest/northeast/southeast/up/down'.split('/')
         result = []
         for act in navis:  # ensure the order of acts in different states
-            if act in valid:
-                self.env.step(act)
-                next_state = self.env.get_state()
-                look, _, _, _ = self.env.step('look')
-                self.env.set_state(next_state)
-                room = self.get_room(look.lower())
-                if depth > 1 and room != 'unknown':
-                    result.append((act, room, self.get_nearby(depth - 1)))
-                else:
-                    result.append((act, room))
-                self.env.set_state(state)
+            self.env.step(act)
+            next_state = self.env.get_state()
+            look, _, _, _ = self.env.step('look')
+            self.env.set_state(next_state)
+            room = self.get_room(look.lower())
+            if depth > 1 and room != 'unknown':
+                result.append((act, room, self.get_nearby(depth - 1)))
+            else:
+                result.append((act, room))
+            self.env.set_state(state)
         return tuple(result)
 
     def last_look_hash(self, location, inventory):
