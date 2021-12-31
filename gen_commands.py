@@ -1,14 +1,15 @@
 import os
 
 # games = ['zork1', 'inhumane', 'ludicorp', 'pentari', 'detective', 'balances', 'deephome', 'dragon']
-games = ['zork1', 'zork3', 'pentari', 'ludicorp', 'inhumane', 'detective', 'balances', 'omniquest', 'library']
+# games = ['zork1', 'zork3', 'pentari', 'ludicorp', 'inhumane', 'detective', 'balances', 'omniquest', 'library']
+games = ['omniquest', 'library']
 run_types = [
-    # ('--use_q_att --use_inv_att --use_gt_state', 'att-gt_state'),
-    # ('--use_q_att --use_inv_att --use_gt_room', 'att-gt_room'),
-    # ('--use_gt_state', 'gt_state'),
-    # ('--use_gt_room', 'gt_room'),
-    ('--use_q_att --use_inv_att --use_nearby_room=2', 'nearby'),
-    ('--use_nearby_room=2', 'nearby'),
+    ('--use_q_att --use_inv_att --use_gt_state', 'att-gt_state'),
+    ('--use_q_att --use_inv_att --use_gt_room', 'att-gt_room'),
+    ('--use_gt_state', 'gt_state'),
+    ('--use_gt_room', 'gt_room'),
+    # ('--use_q_att --use_inv_att', 'att-look'),
+    # ('', 'look'),
     # ('', 'look'),
     # ('', 'raw'),
     # ('--use_gt_state --hash_only', 'gt_state-hash_only'),
