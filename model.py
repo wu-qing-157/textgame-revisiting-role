@@ -134,16 +134,16 @@ class DRRN(torch.nn.Module):
                 inv_mask[i, :len(state.inventory[i])] = 1
             # print(obs_out.shape, obs_mask.shape)
 
-        def att_mean(x, act, act_m, att):
+        def att_mean(x, x_m, act, act_m, att):
             x = torch.repeat_interleave(x, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
-            x_mask = torch.repeat_interleave(x, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+            x_m = torch.repeat_interleave(x_m, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
             x = att(x, act, act_m)
-            x = (x * x_mask[..., None]).sum(dim=1) / x_mask[..., None].sum(dim=1)
+            x = (x * x_m[..., None]).sum(dim=1) / x_m[..., None].sum(dim=1)
             return x
 
-        obs_out = att_mean(obs_out, act_out, act_mask, self.obs_att)
-        look_out = att_mean(look_out, act_out, act_mask, self.look_att)
-        inv_out = att_mean(inv_out, act_out, act_mask, self.inv_att)
+        obs_out = att_mean(obs_out, obs_mask, act_out, act_mask, self.obs_att)
+        look_out = att_mean(look_out, look_mask, act_out, act_mask, self.look_att)
+        inv_out = att_mean(inv_out, inv_mask, act_out, act_mask, self.inv_att)
 
         hash_out = self.packed_hash(state.state_hash)
         hash_out = torch.repeat_interleave(hash_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
