@@ -122,8 +122,8 @@ class DRRN(torch.nn.Module):
         with torch.no_grad():
             act_mask = torch.zeros(act_out.shape[:-1], dtype=torch.float, device=device)
             obs_mask = torch.zeros(obs_out.shape[:-1], dtype=torch.float, device=device)
-            look_mask = torch.zeros(obs_out.shape[:-1], dtype=torch.float, device=device)
-            inv_mask = torch.zeros(obs_out.shape[:-1], dtype=torch.float, device=device)
+            look_mask = torch.zeros(look_out.shape[:-1], dtype=torch.float, device=device)
+            inv_mask = torch.zeros(inv_out.shape[:-1], dtype=torch.float, device=device)
             for i in range(len(act_batch)):
                 act_mask[i, :len(act_batch[i])] = 1
             for i in range(len(state.obs)):
