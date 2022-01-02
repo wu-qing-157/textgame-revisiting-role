@@ -144,6 +144,7 @@ class DRRN(torch.nn.Module):
         obs_out = att_mean(obs_out, obs_mask, act_out, act_mask, self.obs_att)
         look_out = att_mean(look_out, look_mask, act_out, act_mask, self.look_att)
         inv_out = att_mean(inv_out, inv_mask, act_out, act_mask, self.inv_att)
+        act_out = (act_out * act_mask[..., None]).sum(dim=1) / act_mask[..., None].sum(dim=1)
 
         hash_out = self.packed_hash(state.state_hash)
         hash_out = torch.repeat_interleave(hash_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
