@@ -34,9 +34,10 @@ class DRRN(torch.nn.Module):
             nn.Linear(hidden_dim, hidden_dim),
         )
 
-        self.obs_att = BiAttention(hidden_dim, 0.)
-        self.look_att = BiAttention(hidden_dim, 0.)
-        self.inv_att = BiAttention(hidden_dim, 0.)
+        # self.obs_att = BiAttention(hidden_dim, 0.)
+        # self.look_att = BiAttention(hidden_dim, 0.)
+        # self.inv_att = BiAttention(hidden_dim, 0.)
+        self.bidaf = BiAttention(hidden_dim, 0.)
         self.att_scorer = nn.Sequential(nn.Linear(hidden_dim * 14, hidden_dim * 4), nn.LeakyReLU(), nn.Linear(hidden_dim * 4, 1))
         self.inverse_dynamics_att = BiAttention(hidden_dim, 0.)
         self.inverse_dynamics_lin = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, hidden_dim))
@@ -141,9 +142,9 @@ class DRRN(torch.nn.Module):
             x = (x * x_m[..., None]).sum(dim=1) / x_m[..., None].sum(dim=1)
             return x
 
-        obs_out = att_mean(obs_out, obs_mask, act_out, act_mask, self.obs_att)
-        look_out = att_mean(look_out, look_mask, act_out, act_mask, self.look_att)
-        inv_out = att_mean(inv_out, inv_mask, act_out, act_mask, self.inv_att)
+        obs_out = att_mean(obs_out, obs_mask, act_out, act_mask, self.bidaf)
+        look_out = att_mean(look_out, look_mask, act_out, act_mask, self.bidaf)
+        inv_out = att_mean(inv_out, inv_mask, act_out, act_mask, self.bidaf)
         act_out = (act_out * act_mask[..., None]).sum(dim=1) / act_mask[..., None].sum(dim=1)
 
         hash_out = self.packed_hash(state.state_hash)
