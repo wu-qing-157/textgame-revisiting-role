@@ -92,16 +92,17 @@ class JerichoEnv:
         state = self.env.get_state()
         navis = 'north/south/west/east/northwest/southwest/northeast/southeast/up/down'.split('/')
         result = []
-        for act in navis:  # ensure the order of acts in different states
+        for act in navis:
             self.env.step(act)
-            next_state = self.env.get_state()
-            look, _, _, _ = self.env.step('look')
-            self.env.set_state(next_state)
-            room = self.get_room(look.lower())
-            if depth > 1 and room != 'unknown':
-                result.append((act, room, self.get_nearby(depth - 1)))
-            else:
-                result.append((act, room))
+            if self.env._world_changed():
+                next_state = self.env.get_state()
+                look, _, _, _ = self.env.step('look')
+                self.env.set_state(next_state)
+                room = self.get_room(look.lower())
+                if depth > 1 and room != 'unknown':
+                    result.append((act, room, self.get_nearby(depth - 1)))
+                else:
+                    result.append((act, room))
             self.env.set_state(state)
         return tuple(result)
 
