@@ -1,13 +1,15 @@
 import os
 
 # games = ['zork1', 'inhumane', 'ludicorp', 'pentari', 'detective', 'balances', 'deephome', 'dragon']
-games = ['zork3', 'pentari', 'ludicorp', 'inhumane', 'detective']#, 'balances']
+# games = ['zork3', 'pentari', 'ludicorp', 'inhumane', 'detective']#, 'balances']
+# games = ['pentari', 'ludicorp']
+games = ['zork3', 'inhumane', 'detective']
 # games = ['zork1']
 # games = ['omniquest', 'library']
 run_types = [
     ('--use_q_att --use_inv_att --use_gt_state', 'att-gt_state'),
     ('--use_q_att --use_inv_att --use_gt_room', 'att-gt_room'),
-    ('--use_q_att --use_inv_att --use_nearby_room=1', 'att-nearby'),
+    # ('--use_q_att --use_inv_att --use_nearby_room=1', 'att-nearby'),
     # ('--hash_only --use_nearby_room=1', 'only-nearby'),
     # ('--use_nearby_room=1', 'noatt-nearby'),
     # ('--use_gt_state', 'gt_state'),
