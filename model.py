@@ -63,6 +63,8 @@ class DRRN(torch.nn.Module):
     def packed_hash(self, x, mlp=True):
         y = []
         for data in x:
+            if isinstance(data, list):
+                data = tuple(data)
             data = hash(data)
             if data in self.hash_cache:
                 y.append(self.hash_cache[data])
@@ -152,9 +154,9 @@ class DRRN(torch.nn.Module):
         hash_out = self.packed_hash(state.state_hash)
         hash_out = torch.repeat_interleave(hash_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
 
-        obs_hash_out = self.packed_hash(tuple(state.obs), mlp=False)
-        look_hash_out = self.packed_hash(tuple(state.description), mlp=False)
-        inv_hash_out = self.packed_hash(tuple(state.inventory), mlp=False)
+        obs_hash_out = self.packed_hash(state.obs, mlp=False)
+        look_hash_out = self.packed_hash(state.description, mlp=False)
+        inv_hash_out = self.packed_hash(state.inventory, mlp=False)
         state_out = torch.cat((obs_out, look_out, inv_out, hash_out, act_out, obs_hash_out, look_hash_out, inv_hash_out), dim=-1)
 
         score = self.att_scorer(state_out).squeeze(-1)
