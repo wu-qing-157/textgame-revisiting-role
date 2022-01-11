@@ -117,9 +117,9 @@ class JerichoEnv:
                 location = int(self.env.get_player_location().num)
             elif self.use_nearby_room:
                 location = (self.get_room(look), self.get_nearby(depth=self.use_nearby_room))
-                with open(f'{self.log_dir}/location.log', 'a') as f:
-                    print(int(self.env.get_player_location().num), file=f)
-                    print(repr(location), file=f)
+                # with open(f'{self.log_dir}/location.log', 'a') as f:
+                #     print(int(self.env.get_player_location().num), file=f)
+                #     print(repr(location), file=f)
             else:
                 location = self.get_room(look)
             self.last_look[location] = hash(look)

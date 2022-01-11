@@ -1,11 +1,15 @@
 import os
 
 # games = ['zork1', 'inhumane', 'ludicorp', 'pentari', 'detective', 'balances', 'deephome', 'dragon']
-games = ['zork3', 'pentari', 'ludicorp', 'inhumane', 'detective', 'balances']
+# games = ['zork3', 'pentari', 'ludicorp', 'inhumane', 'detective']#, 'balances']
+games = ['zork1']
 # games = ['omniquest', 'library']
 run_types = [
     # ('--use_q_att --use_inv_att --use_gt_state', 'att-gt_state'),
     # ('--use_q_att --use_inv_att --use_gt_room', 'att-gt_room'),
+    # ('--use_q_att --use_inv_att --use_nearby_room=1', 'att-nearby'),
+    ('--hash_only --use_nearby_room=1', 'only-nearby'),
+    ('--use_nearby_room=1', 'noatt-nearby'),
     # ('--use_gt_state', 'gt_state'),
     # ('--use_gt_room', 'gt_room'),
     # ('--use_q_att --use_inv_att', 'att-look'),
@@ -13,10 +17,10 @@ run_types = [
     # ('', 'look'),
     # ('', 'raw'),
     # ('--use_gt_state --hash_only', 'gt_state-hash_only'),
-    ('--hash_only --use_gt_state', 'only-gt_state'),
-    ('--hash_only --use_gt_room', 'only-gt_room'),
+    # ('--hash_only --use_gt_state', 'only-gt_state'),
+    # ('--hash_only --use_gt_room', 'only-gt_room'),
 ]
-seeds = [4]
+seeds = [4, 5, 6]
 
 cases = []
 cuda = 0
