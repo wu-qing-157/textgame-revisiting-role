@@ -207,7 +207,7 @@ def main():
 
     env = JerichoEnv(args.rom_path, args.seed, args.env_step_limit, get_valid=True, cache=cache, args=args)
     # envs = [JerichoEnv(args.rom_path, args.seed, args.env_step_limit, get_valid=True, cache=cache, args=args) for _ in range(args.num_envs)]
-    envs = VecEnv(args.num_envs, env)
+    envs = VecEnv(args.num_envs, env, args.output_dir)
     train(agent, env, envs, args.max_steps, args.update_freq, args.eval_freq, args.checkpoint_freq, args.log_freq, args.r_for)
 
 
