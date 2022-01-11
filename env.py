@@ -61,6 +61,7 @@ class JerichoEnv:
         self.use_gt_room = args.use_gt_room
         self.use_nearby_room = args.use_nearby_room
         self.log_dir = args.output_dir
+        self.use_ctypes = 'zork1' not in rom_path # due to a bug in Zork I
         # self.ram_bytes = defaultdict(lambda: set())
         # self.stack_bytes = defaultdict(lambda: set())
     
@@ -163,7 +164,7 @@ class JerichoEnv:
                 info['inv'] = inv.lower()
                 self.env.set_state(save)
                 if self.get_valid:
-                    valid = self.env.get_valid_actions(use_ctypes=True)
+                    valid = self.env.get_valid_actions(use_ctypes=self.use_ctypes)
                     if len(valid) == 0:
                         valid = ['wait', 'yes', 'no']
                     info['valid'] = valid
@@ -192,7 +193,7 @@ class JerichoEnv:
         inv, _, _, _ = self.env.step('inventory')
         info['inv'] = inv.lower()
         self.env.set_state(save)
-        valid = self.env.get_valid_actions(use_ctypes=True)
+        valid = self.env.get_valid_actions(use_ctypes=self.use_ctypes)
         info['valid'] = valid
         self.steps = 0
         self.max_score = 0
