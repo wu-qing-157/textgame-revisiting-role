@@ -38,7 +38,7 @@ class DRRN(torch.nn.Module):
         # self.look_att = BiAttention(hidden_dim, 0.)
         # self.inv_att = BiAttention(hidden_dim, 0.)
         self.bidaf = BiAttention(hidden_dim, 0.)
-        self.att_scorer = nn.Sequential(nn.Linear(hidden_dim * 14, hidden_dim * 4), nn.LeakyReLU(), nn.Linear(hidden_dim * 4, 1))
+        self.att_scorer = nn.Sequential(nn.Linear(hidden_dim * 17, hidden_dim * 4), nn.LeakyReLU(), nn.Linear(hidden_dim * 4, 1))
         self.inverse_dynamics_att = BiAttention(hidden_dim, 0.)
         self.inverse_dynamics_lin = nn.Sequential(nn.Linear(hidden_dim * 4, hidden_dim * 2), nn.LeakyReLU(), nn.Linear(hidden_dim * 2, hidden_dim))
 
@@ -60,7 +60,7 @@ class DRRN(torch.nn.Module):
         self.use_inv_att = use_inv_att
         self.hash_cache = {}
     
-    def packed_hash(self, x):
+    def packed_hash(self, x, mlp=True):
         y = []
         for data in x:
             data = hash(data)
@@ -72,6 +72,8 @@ class DRRN(torch.nn.Module):
                 y.append(a)
                 self.hash_cache[data] = a
         y = torch.stack(y, dim=0).to(device)
+        if not mlp:
+            return y
         return self.hash_linear(y)
 
     def packed_rnn(self, x, rnn, return_last=True):
@@ -150,7 +152,10 @@ class DRRN(torch.nn.Module):
         hash_out = self.packed_hash(state.state_hash)
         hash_out = torch.repeat_interleave(hash_out, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
 
-        state_out = torch.cat((obs_out, look_out, inv_out, hash_out, act_out), dim=-1)
+        obs_hash_out = self.packed_hash(state.obs, mlp=False)
+        look_hash_out = self.packed_hash(state.description, mlp=False)
+        inv_hash_out = self.packed_hash(state.inventory, mlp=False)
+        state_out = torch.cat((obs_out, look_out, inv_out, hash_out, act_out, obs_hash_out, look_hash_out, inv_hash_out), dim=-1)
 
         score = self.att_scorer(state_out).squeeze(-1)
         score = torch.split(score, act_sizes)
