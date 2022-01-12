@@ -17,7 +17,13 @@ def worker(remote, parent_remote, env, log_file):
                     reward = 0
                     done = False
                 else:
-                    ob, reward, done, info = env.step(data)
+                    import func_timeout
+                    try:
+                        ob, reward, done, info = func_timeout.func_timeout(60, env.step, (data,))
+                    except func_timeout.FunctionTimedOut:
+                        ob, info = env.reset()
+                        reward = 0
+                        done = False
                 remote.send((ob, reward, done, info))
             elif cmd == 'reset':
                 print(f'reset', end='', file=log_file_)
