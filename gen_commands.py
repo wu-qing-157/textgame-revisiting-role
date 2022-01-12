@@ -1,8 +1,8 @@
 import os
 
 # games = ['zork1', 'inhumane', 'ludicorp', 'pentari', 'detective', 'balances', 'deephome', 'dragon']
-# games = ['zork3', 'pentari', 'ludicorp', 'inhumane', 'detective']#, 'balances']
-games = ['zork3', 'inhumane', 'detective']#, 'balances']
+games = ['zork3', 'pentari', 'ludicorp', 'inhumane', 'detective']#, 'balances']
+# games = ['zork3', 'inhumane', 'detective']#, 'balances']
 # games = ['zork1']
 # games = ['omniquest', 'library']
 run_types = [
@@ -21,7 +21,7 @@ run_types = [
     # ('--hash_only --use_gt_state', 'only-gt_state'),
     # ('--hash_only --use_gt_room', 'only-gt_room'),
 ]
-seeds = [5, 6]
+seeds = [5]#, 6]
 
 cases = []
 cuda = 0
