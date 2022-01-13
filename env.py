@@ -192,7 +192,7 @@ class JerichoEnv:
     def reset(self):
         initial_ob, info = self.env.reset()
         save = self.env.get_state()
-        self.walkthrough = deque(self.env.get_walkthrough())
+        # self.walkthrough = deque(self.env.get_walkthrough())
         look, _, _, _ = self.env.step('look')
         info['look'] = look.lower()
         self.env.set_state(save)
@@ -200,6 +200,8 @@ class JerichoEnv:
         info['inv'] = inv.lower()
         self.env.set_state(save)
         valid = self.env.get_valid_actions(use_ctypes=self.use_ctypes)
+        if len(valid) == 0:
+            valid = ['wait', 'yes', 'no']
         info['valid'] = valid
         self.steps = 0
         self.max_score = 0
