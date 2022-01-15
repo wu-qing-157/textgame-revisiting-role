@@ -5,7 +5,7 @@ from argparse import Namespace
 from tqdm import tqdm
 
 
-def stat_state_hash(rom, t='gt_state'):
+def stat_state_hash(rom, t='gt_state', log_same=True):
     if t == 'gt_state':
         env = JerichoEnv(rom, 0, get_valid=False, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby_room=0, output_dir='logs_temp', no_current=False, no_last_look=False))
     elif t == 'gt_room':
@@ -21,22 +21,22 @@ def stat_state_hash(rom, t='gt_state'):
         ret.append((hash((obs, info['look'], info['inv']))))
     else:
         ret.append(hash(info['state_hash']))
+    count = 0
     for action in tqdm(walkthrough):
-        _, _, done, info = env.step(action)
+        obs, _, done, info = env.step(action)
         if t == 'drrn_hash':
             ret.append((hash((obs, info['look'], info['inv']))))
         else:
             ret.append(hash(info['state_hash']))
+        if ret[-1] != ret[-2]:
+            count += 1
+        elif log_same:
+            print(action)
+            print(obs.strip())
+            print(info['look'].strip())
         if done:
             break
     print(env.env.get_score())
-    count = 0
-    for idx, i, j in zip(range(len(ret)), ret[:-1], ret[1:]):
-        if i != j:
-            count += 1
-        else:
-            print(idx, end=' ')
-    print()
     print(t, len(ret) - 1, count)
 
 
