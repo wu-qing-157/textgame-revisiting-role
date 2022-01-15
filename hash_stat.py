@@ -35,7 +35,7 @@ def stat_state_hash(rom, t='gt_state'):
         if i != j:
             count += 1
         else:
-            print(idx, end='')
+            print(idx, end=' ')
     print()
     print(t, len(ret) - 1, count)
 
