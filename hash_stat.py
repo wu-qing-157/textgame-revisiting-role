@@ -13,7 +13,7 @@ def stat_state_hash(rom, t='gt_state'):
     elif t == 'nearby':
         env = JerichoEnv(rom, 0, get_valid=False, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby_room=1, output_dir='logs_temp', no_current=False, no_last_look=False))
     else:
-        env = JerichoEnv(rom, 0, get_valid=False, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby_room=1, output_dir='logs_temp', no_current=False, no_last_look=False))
+        env = JerichoEnv(rom, 0, get_valid=False, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby_room=0, output_dir='logs_temp', no_current=False, no_last_look=False))
     walkthrough = env.env.get_walkthrough()
     ret = []
     obs, info = env.reset()
@@ -29,11 +29,15 @@ def stat_state_hash(rom, t='gt_state'):
             ret.append(hash(info['state_hash']))
         if done:
             break
+    print(env.env.get_score())
     count = 0
-    for i, j in zip(ret[:-1], ret[1:]):
+    for idx, i, j in zip(range(len(ret)), ret[:-1], ret[1:]):
         if i != j:
             count += 1
-    print(len(ret) - 1, count)
+        else:
+            print(idx, end='')
+    print()
+    print(t, len(ret) - 1, count)
 
 
 if __name__ == '__main__':
