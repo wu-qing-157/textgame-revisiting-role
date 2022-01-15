@@ -32,8 +32,8 @@ def stat_state_hash(rom, t='gt_state', log_same=False):
             count += 1
         elif log_same:
             print(action)
-            print(obs.strip())
-            print(info['look'].strip())
+            print(repr(obs.strip()))
+            # print(info['look'].strip())
         if done:
             break
     print(env.env.get_score())
@@ -43,7 +43,7 @@ def stat_state_hash(rom, t='gt_state', log_same=False):
 if __name__ == '__main__':
     rom = sys.argv[1]
     stat_state_hash(rom, t='gt_state', log_same=True)
-    stat_state_hash(rom, t='gt_room')
+    stat_state_hash(rom, t='gt_room', log_same=True)
     stat_state_hash(rom, t='nearby')
     stat_state_hash(rom, t='room_name')
     stat_state_hash(rom, t='drrn')
