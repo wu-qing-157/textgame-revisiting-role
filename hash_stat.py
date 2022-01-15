@@ -1,3 +1,5 @@
+import sys
+
 from env import JerichoEnv
 from argparse import Namespace
 from tqdm import tqdm
@@ -11,24 +13,33 @@ def stat_state_hash(rom, t='gt_state'):
     elif t == 'nearby':
         env = JerichoEnv(rom, 0, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby_room=1, output_dir='logs_temp', no_current=False, no_last_look=False))
     else:
-        assert False
+        env = JerichoEnv(rom, 0, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby_room=1, output_dir='logs_temp', no_current=False, no_last_look=False))
     walkthrough = env.env.get_walkthrough()
     ret = []
-    _, info = env.reset()
-    ret.append(hash(info['state_hash']))
+    obs, info = env.reset()
+    if t == 'drrn_hash':
+        ret.append((hash((obs, info['look'], info['inv']))))
+    else:
+        ret.append(hash(info['state_hash']))
     for action in tqdm(walkthrough):
         _, _, done, info = env.step(action)
-        ret.append(hash(info['state_hash']))
+        if t == 'drrn_hash':
+            ret.append((hash((obs, info['look'], info['inv']))))
+        else:
+            ret.append(hash(info['state_hash']))
         if done:
             break
     count = 0
     for i, j in zip(ret[:-1], ret[1:]):
         if i != j:
             count += 1
-    print(len(ret), count)
+    print(len(ret) - 1, count)
 
 
 if __name__ == '__main__':
-    stat_state_hash('zork1.z5', t='gt_state')
-    stat_state_hash('zork1.z5', t='gt_room')
-    stat_state_hash('zork1.z5', t='gt_nearby')
+    rom = sys.argv[1]
+    stat_state_hash(rom, t='gt_state')
+    stat_state_hash(rom, t='gt_room')
+    stat_state_hash(rom, t='nearby')
+    stat_state_hash(rom, t='room_name')
+    stat_state_hash(rom, t='drrn')
