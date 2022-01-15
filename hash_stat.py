@@ -18,14 +18,14 @@ def stat_state_hash(rom, t='gt_state', log_same=False):
     ret = []
     obs, info = env.reset()
     if t == 'drrn_hash':
-        ret.append((hash((obs, info['look'], info['inv']))))
+        ret.append((hash((info['look'], info['inv']))))
     else:
         ret.append(hash(info['state_hash']))
     count = 0
     for action in tqdm(walkthrough):
         obs, _, done, info = env.step(action)
         if t == 'drrn_hash':
-            ret.append((hash((obs, info['look'], info['inv']))))
+            ret.append((hash((info['look'], info['inv']))))
         else:
             ret.append(hash(info['state_hash']))
         if ret[-1] != ret[-2]:
@@ -42,7 +42,7 @@ def stat_state_hash(rom, t='gt_state', log_same=False):
 
 if __name__ == '__main__':
     rom = sys.argv[1]
-    stat_state_hash(rom, t='gt_state')
+    stat_state_hash(rom, t='gt_state', log_same=True)
     stat_state_hash(rom, t='gt_room')
     stat_state_hash(rom, t='nearby')
     stat_state_hash(rom, t='room_name')
