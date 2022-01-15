@@ -1,21 +1,22 @@
 from env import JerichoEnv
 from argparse import Namespace
+from tqdm import tqdm
 
 
 def stat_state_hash(rom, t='gt_state'):
     if t == 'gt_state':
-        env = JerichoEnv(rom, Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby=0, output_dir='logs_temp', no_current=False, no_last_look=False))
+        env = JerichoEnv(rom, 0, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby=0, output_dir='logs_temp', no_current=False, no_last_look=False))
     elif t == 'gt_room':
-        env = JerichoEnv(rom, Namespace(nor=False, randr=False, perturb=False, use_gt_state=False, use_gt_room=True, use_nearby=0, output_dir='logs_temp', no_current=False, no_last_look=False))
+        env = JerichoEnv(rom, 0, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=False, use_gt_room=True, use_nearby=0, output_dir='logs_temp', no_current=False, no_last_look=False))
     elif t == 'nearby':
-        env = JerichoEnv(rom, Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby=1, output_dir='logs_temp', no_current=False, no_last_look=False))
+        env = JerichoEnv(rom, 0, args=Namespace(nor=False, randr=False, perturb=False, use_gt_state=True, use_gt_room=False, use_nearby=1, output_dir='logs_temp', no_current=False, no_last_look=False))
     else:
         assert False
     walkthrough = env.env.get_walkthrough()
     ret = []
     _, info = env.reset()
     ret.append(hash(info['state_hash']))
-    for action in walkthrough:
+    for action in tqdm(walkthrough):
         _, _, done, info = env.step(action)
         ret.append(hash(info['state_hash']))
         if done:
