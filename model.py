@@ -175,6 +175,9 @@ class DRRN(torch.nn.Module):
         state = State(*zip(*state_batch))
         # Encode the various aspects of the state
         with torch.set_grad_enabled(not self.fix_rep):
+            print(state.state_hash)
+            print(state.obs)
+            quit()
             if self.hash_only:
                 return self.packed_hash(state.state_hash)
             obs_out = self.packed_hash(state.obs) if self.hash_current else self.packed_rnn(state.obs, self.obs_encoder)

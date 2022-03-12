@@ -212,6 +212,10 @@ class JerichoEnv:
         self.max_score = 0
         self.objs = set()
         self.last_look.clear()
+        if self.hash_current:
+            initial_ob = hash(initial_ob)
+            info['look'] = hash(info['look'])
+            info['inv'] = hash(info['inv'])
         info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         return initial_ob, info
 
