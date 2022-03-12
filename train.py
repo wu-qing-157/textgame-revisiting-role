@@ -185,6 +185,7 @@ def parse_args():
     parser.add_argument('--use_gt_room', action='store_true')
     parser.add_argument('--use_nearby_room', type=int)
     parser.add_argument('--hash_only', action='store_true')
+    parser.add_argument('--hash_current', action='store')
     parser.add_argument('--no_current', action='store_true')
     parser.add_argument('--no_last_look', action='store_true')
     return parser.parse_args()

@@ -62,6 +62,7 @@ class JerichoEnv:
         self.use_nearby_room = args.use_nearby_room
         self.log_dir = args.output_dir
         self.use_ctypes = 'zork1' not in rom_path # due to a bug in Zork I
+        self.hash_current = args.hash_current
         self.no_current = args.no_current
         self.no_last_look = args.no_last_look
         # self.ram_bytes = defaultdict(lambda: set())
@@ -186,6 +187,10 @@ class JerichoEnv:
             ob = self.paraphrase(ob)
             info['look'] = self.paraphrase(info['look'])
             info['inv'] = self.paraphrase(info['inv'])
+        if self.hash_current:
+            ob = hash(ob)
+            info['look'] = hash(info['look'])
+            info['inv'] = hash(info['inv'])
         info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         return ob, reward, done, info
 

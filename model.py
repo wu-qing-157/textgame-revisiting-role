@@ -16,7 +16,7 @@ class DRRN(torch.nn.Module):
         Deep Reinforcement Relevance Network - He et al. '16
 
     """
-    def __init__(self, vocab_size, embedding_dim, hidden_dim, fix_rep=0, hash_rep=0, act_obs=0, hash_only=0, use_q_att=0, use_inv_att=0):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, fix_rep=0, hash_rep=0, act_obs=0, hash_only=0, hash_current=0, use_q_att=0, use_inv_att=0):
         super(DRRN, self).__init__()
         self.hidden_dim = hidden_dim
         self.embedding    = nn.Embedding(vocab_size, embedding_dim)
@@ -58,6 +58,7 @@ class DRRN(torch.nn.Module):
         self.hash_only = hash_only
         self.use_q_att = use_q_att
         self.use_inv_att = use_inv_att
+        self.hash_current = hash_current
         self.hash_cache = {}
     
     def packed_hash(self, x):
@@ -114,37 +115,49 @@ class DRRN(torch.nn.Module):
 
     def state_action_attention(self, state_batch, act_batch):
         state = State(*zip(*state_batch))
-        obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
-        look_out = self.packed_rnn(state.description, self.look_encoder, return_last=False).transpose(0, 1)
-        inv_out = self.packed_rnn(state.inventory, self.inv_encoder, return_last=False).transpose(0, 1)
-        act_sizes = [len(a) for a in act_batch]
-        act_batch = list(itertools.chain.from_iterable(act_batch))
-        act_out = self.packed_rnn(act_batch, self.act_encoder, return_last=False).transpose(0, 1)
-        with torch.no_grad():
-            act_mask = torch.zeros(act_out.shape[:-1], dtype=torch.float, device=device)
-            obs_mask = torch.zeros(obs_out.shape[:-1], dtype=torch.float, device=device)
-            look_mask = torch.zeros(look_out.shape[:-1], dtype=torch.float, device=device)
-            inv_mask = torch.zeros(inv_out.shape[:-1], dtype=torch.float, device=device)
-            for i in range(len(act_batch)):
-                act_mask[i, :len(act_batch[i])] = 1
-            for i in range(len(state.obs)):
-                obs_mask[i, :len(state.obs[i])] = 1
-            for i in range(len(state.description)):
-                look_mask[i, :len(state.description[i])] = 1
-            for i in range(len(state.inventory)):
-                inv_mask[i, :len(state.inventory[i])] = 1
-            # print(obs_out.shape, obs_mask.shape)
+        if self.hash_current:
+            obs_out = self.packed_hash(state.obs)
+            look_out = self.packed_hash(state.description)
+            inv_out = self.packed_hash(state.inventory)
+            act_sizes = [len(a) for a in act_batch]
+            act_batch = list(itertools.chain.from_iterable(act_batch))
+            act_out = self.packed_rnn(act_batch, self.act_encoder, return_last=False).transpose(0, 1)
+            with torch.no_grad():
+                act_mask = torch.zeros(act_out.shape[:-1], dtype=torch.float, device=device)
+                for i in range(len(act_batch)):
+                    act_mask[i, :len(act_batch[i])] = 1
+        else:
+            obs_out = self.packed_rnn(state.obs, self.obs_encoder, return_last=False).transpose(0, 1)
+            look_out = self.packed_rnn(state.description, self.look_encoder, return_last=False).transpose(0, 1)
+            inv_out = self.packed_rnn(state.inventory, self.inv_encoder, return_last=False).transpose(0, 1)
+            act_sizes = [len(a) for a in act_batch]
+            act_batch = list(itertools.chain.from_iterable(act_batch))
+            act_out = self.packed_rnn(act_batch, self.act_encoder, return_last=False).transpose(0, 1)
+            with torch.no_grad():
+                act_mask = torch.zeros(act_out.shape[:-1], dtype=torch.float, device=device)
+                obs_mask = torch.zeros(obs_out.shape[:-1], dtype=torch.float, device=device)
+                look_mask = torch.zeros(look_out.shape[:-1], dtype=torch.float, device=device)
+                inv_mask = torch.zeros(inv_out.shape[:-1], dtype=torch.float, device=device)
+                for i in range(len(act_batch)):
+                    act_mask[i, :len(act_batch[i])] = 1
+                for i in range(len(state.obs)):
+                    obs_mask[i, :len(state.obs[i])] = 1
+                for i in range(len(state.description)):
+                    look_mask[i, :len(state.description[i])] = 1
+                for i in range(len(state.inventory)):
+                    inv_mask[i, :len(state.inventory[i])] = 1
+                # print(obs_out.shape, obs_mask.shape)
 
-        def att_mean(x, x_m, act, act_m, att):
-            x = torch.repeat_interleave(x, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
-            x_m = torch.repeat_interleave(x_m, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
-            x = att(x, act, act_m)
-            x = (x * x_m[..., None]).sum(dim=1) / x_m[..., None].sum(dim=1)
-            return x
+            def att_mean(x, x_m, act, act_m, att):
+                x = torch.repeat_interleave(x, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+                x_m = torch.repeat_interleave(x_m, torch.tensor(act_sizes, dtype=torch.long, device=device), dim=0)
+                x = att(x, act, act_m)
+                x = (x * x_m[..., None]).sum(dim=1) / x_m[..., None].sum(dim=1)
+                return x
 
-        obs_out = att_mean(obs_out, obs_mask, act_out, act_mask, self.bidaf)
-        look_out = att_mean(look_out, look_mask, act_out, act_mask, self.bidaf)
-        inv_out = att_mean(inv_out, inv_mask, act_out, act_mask, self.bidaf)
+            obs_out = att_mean(obs_out, obs_mask, act_out, act_mask, self.bidaf)
+            look_out = att_mean(look_out, look_mask, act_out, act_mask, self.bidaf)
+            inv_out = att_mean(inv_out, inv_mask, act_out, act_mask, self.bidaf)
         act_out = (act_out * act_mask[..., None]).sum(dim=1) / act_mask[..., None].sum(dim=1)
 
         hash_out = self.packed_hash(state.state_hash)
@@ -164,10 +177,10 @@ class DRRN(torch.nn.Module):
         with torch.set_grad_enabled(not self.fix_rep):
             if self.hash_only:
                 return self.packed_hash(state.state_hash)
-            obs_out = self.packed_rnn(state.obs, self.obs_encoder)
+            obs_out = self.packed_hash(state.obs) if self.hash_current else self.packed_rnn(state.obs, self.obs_encoder)
             if self.act_obs: return obs_out
-            look_out = self.packed_rnn(state.description, self.look_encoder)
-            inv_out = self.packed_rnn(state.inventory, self.inv_encoder)
+            look_out = self.packed_hash(state.description) if self.hash_current else self.packed_rnn(state.description, self.look_encoder)
+            inv_out = self.packed_hash(state.inventory) if self.hash_current else self.packed_rnn(state.inventory, self.inv_encoder)
             hash_out = self.packed_hash(state.state_hash)
             state_out = self.state_encoder(torch.cat((obs_out, look_out, inv_out, hash_out), dim=1))
         return state_out
