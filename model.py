@@ -64,6 +64,8 @@ class DRRN(torch.nn.Module):
     def packed_hash(self, x):
         y = []
         for data in x:
+            if isinstance(data, list):
+                data = hash(tuple(data))
             data = hash(data)
             if data in self.hash_cache:
                 y.append(self.hash_cache[data])
@@ -175,9 +177,6 @@ class DRRN(torch.nn.Module):
         state = State(*zip(*state_batch))
         # Encode the various aspects of the state
         with torch.set_grad_enabled(not self.fix_rep):
-            print(state.state_hash)
-            print(state.obs)
-            quit()
             if self.hash_only:
                 return self.packed_hash(state.state_hash)
             obs_out = self.packed_hash(state.obs) if self.hash_current else self.packed_rnn(state.obs, self.obs_encoder)
