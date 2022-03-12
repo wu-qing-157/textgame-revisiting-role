@@ -20,7 +20,7 @@ class DRRN_Agent:
         self.gamma = args.gamma
         self.batch_size = args.batch_size
         self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-        self.network = DRRN(len(self.tokenizer), args.embedding_dim, args.hidden_dim, args.fix_rep, args.hash_rep, args.act_obs, args.hash_only, args.use_q_att, args.use_inv_att).to(device)
+        self.network = DRRN(len(self.tokenizer), args.embedding_dim, args.hidden_dim, args.fix_rep, args.hash_rep, args.act_obs, args.hash_only, args.hash_current, args.use_q_att, args.use_inv_att).to(device)
         self.network.tokenizer = self.tokenizer
         self.memory = ABReplayMemory(args.memory_size, args.memory_alpha) 
         self.save_path = args.output_dir
