@@ -187,11 +187,11 @@ class JerichoEnv:
             ob = self.paraphrase(ob)
             info['look'] = self.paraphrase(info['look'])
             info['inv'] = self.paraphrase(info['inv'])
+        info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         if self.hash_current:
             ob = hash(ob)
             info['look'] = hash(info['look'])
             info['inv'] = hash(info['inv'])
-        info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         return ob, reward, done, info
 
     def reset(self):
@@ -212,11 +212,11 @@ class JerichoEnv:
         self.max_score = 0
         self.objs = set()
         self.last_look.clear()
+        info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         if self.hash_current:
             initial_ob = hash(initial_ob)
             info['look'] = hash(info['look'])
             info['inv'] = hash(info['inv'])
-        info['state_hash'] = self.get_state_hash(info['look'], info['inv'])
         return initial_ob, info
 
     def get_dictionary(self):
