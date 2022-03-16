@@ -1,0 +1,403 @@
+Starting evaluation episode 0
+Obs0: Copyright (c) 1981, 1982, 1983 Infocom, Inc. All rights reserved. ZORK is a registered trademark of Infocom, Inc. Revision 88 / Serial number 840726  West of House You are standing in an open field west of a white house, with a boarded front door. There is a small mailbox here. Inv: you are empty handed. Desc: west of house you are standing in an open field west of a white house, with a boarded front door. there is a small mailbox here.
+Action0: north, Q-Value 30.41
+Q-Values: 1)30.41 north 2)29.46 south 3)26.61 west 4)19.01 open mailbox 
+Reward0: 0, Score 0, Done False
+Obs1: North of House You are facing the north side of a white house. There is no door here, and all the windows are boarded up. To the north a narrow path winds through the trees. Inv: you are empty handed. Desc: north of house you are facing the north side of a white house. there is no door here, and all the windows are boarded up. to the north a narrow path winds through the trees.
+Action1: east, Q-Value 34.98
+Q-Values: 1)34.98 east 2)27.72 west 3)23.84 north 
+Reward1: 0, Score 0, Done False
+Obs2: Behind House You are behind the white house. A path leads into the forest to the east. In one corner of the house there is a small window which is slightly ajar. Inv: you are empty handed. Desc: behind house you are behind the white house. a path leads into the forest to the east. in one corner of the house there is a small window which is slightly ajar.
+Action2: open window, Q-Value 37.90
+Q-Values: 1)37.90 open window 2)22.81 south 3)22.42 east 4)21.77 north 
+Reward2: 0, Score 0, Done False
+Obs3: With great effort, you open the window far enough to allow entry. Inv: you are empty handed. Desc: behind house you are behind the white house. a path leads into the forest to the east. in one corner of the house there is a small window which is open.
+Action3: west, Q-Value 41.74
+Q-Values: 1)41.74 west 2)29.51 close window 3)28.59 north 4)28.34 south 5)25.49 east 
+Reward3: 10, Score 10, Done False
+Obs4: Kitchen You are in the kitchen of the white house. A table seems to have been used recently for the preparation of food. A passage leads to the west and a dark staircase can be seen leading upward. A dark chimney leads down and to the east is a small window which is open. On the table is an elongated brown sack, smelling of hot peppers. A bottle is sitting on the table. The glass bottle contains:   A quantity of water Inv: you are empty handed. Desc: kitchen you are in the kitchen of the white house. a table seems to have been used recently for the preparation of food. a passage leads to the west and a dark staircase can be seen leading upward. a dark chimney leads down and to the east is a small window which is open. on the table is an elongated brown sack, smelling of hot peppers. a bottle is sitting on the table. the glass bottle contains:   a quantity of water
+Action4: west, Q-Value 35.91
+Q-Values: 1)35.91 west 2)23.31 close window 3)23.10 take all 4)22.58 up 5)22.58 east 6)21.82 open bottle 7)21.72 open sack 8)21.42 take bottle 9)21.16 take sack 10)14.77 jump 
+Reward4: 0, Score 10, Done False
+Obs5: Living Room You are in the living room. There is a doorway to the east, a wooden door with strange gothic lettering to the west, which appears to be nailed shut, a trophy case, and a large oriental rug in the center of the room. Above the trophy case hangs an elvish sword of great antiquity. A battery powered brass lantern is on the trophy case. Inv: you are empty handed. Desc: living room you are in the living room. there is a doorway to the east, a wooden door with strange gothic lettering to the west, which appears to be nailed shut, a trophy case, and a large oriental rug in the center of the room. above the trophy case hangs an elvish sword of great antiquity. a battery powered brass lantern is on the trophy case.
+Action5: push rug, Q-Value 38.33
+Q-Values: 1)38.33 push rug 2)38.06 take all 3)34.58 turn on lantern 4)33.69 open case 5)32.50 take lantern 6)30.30 east 7)26.92 take sword 
+Reward5: 0, Score 10, Done False
+Obs6: With a great effort, the rug is moved to one side of the room, revealing the dusty cover of a closed trap door. Inv: you are empty handed. Desc: living room you are in the living room. there is a doorway to the east, a wooden door with strange gothic lettering to the west, which appears to be nailed shut, a trophy case, and a closed trap door at your feet. above the trophy case hangs an elvish sword of great antiquity. a battery powered brass lantern is on the trophy case.
+Action6: take all, Q-Value 42.20
+Q-Values: 1)42.20 take all 2)36.44 take lantern 3)33.18 east 4)33.14 open trap 5)31.47 turn on lantern 6)28.56 take sword 7)28.43 open case 
+Reward6: 0, Score 10, Done False
+Obs7: trophy case: The trophy case is securely fastened to the wall. sword: Taken. brass lantern: Taken. carpet: The rug is extremely heavy and cannot be carried. Inv: you are carrying:   a brass lantern   a sword Desc: living room you are in the living room. there is a doorway to the east, a wooden door with strange gothic lettering to the west, which appears to be nailed shut, a trophy case, and a closed trap door at your feet.
+Action7: open trap, Q-Value 46.72
+Q-Values: 1)46.72 open trap 2)40.35 open case 3)29.41 east 4)27.01 turn on lantern 5)25.08 throw lantern at west 6)22.21 put down sword 7)20.05 put down lantern 8)19.12 put down all 
+Reward7: 0, Score 10, Done False
+Obs8: The door reluctantly opens to reveal a rickety staircase descending into darkness. Inv: you are carrying:   a brass lantern   a sword Desc: living room you are in the living room. there is a doorway to the east, a wooden door with strange gothic lettering to the west, which appears to be nailed shut, a trophy case, and a rug lying beside an open trap door.
+Action8: open case, Q-Value 41.88
+Q-Values: 1)51.30 down 2)41.88 open case 3)40.43 close trap 4)29.99 east 5)28.20 turn on lantern 6)28.16 throw lantern at west 7)24.55 put down sword 8)22.76 put down lantern 9)22.22 put down all 
+Reward8: 0, Score 10, Done False
+Obs9: Opened. Inv: you are carrying:   a brass lantern   a sword Desc: living room you are in the living room. there is a doorway to the east, a wooden door with strange gothic lettering to the west, which appears to be nailed shut, a trophy case, and a rug lying beside an open trap door.
+Action9: down, Q-Value 46.63
+Q-Values: 1)46.63 down 2)42.55 close trap 3)31.37 east 4)29.54 throw lantern at west 5)29.50 close case 6)28.92 turn on lantern 7)25.64 put sword in case 8)24.81 put lantern in case 9)24.58 put down sword 10)24.22 put all in case 11)23.65 put down lantern 12)23.12 put down all 
+Reward9: 25, Score 35, Done False
+Obs10: You have moved into a dark place. The trap door crashes shut, and you hear someone barring it.  It is pitch black. You are likely to be eaten by a grue. Your sword is glowing with a faint blue glow. Inv: you are carrying:   a brass lantern   a sword Desc: it is pitch black. you are likely to be eaten by a grue.
+Action10: turn on lantern, Q-Value 30.30
+Q-Values: 1)30.30 turn on lantern 2)18.46 south 3)17.24 put down sword 4)16.82 east 5)13.45 throw lantern at grue 6)13.36 put down lantern 7)13.01 put down all 8)12.03 north 
+Reward10: 0, Score 35, Done False
+Obs11: The brass lantern is now on.  Cellar You are in a dark and damp cellar with a narrow passageway leading north, and a crawlway to the south. On the west is the bottom of a steep metal ramp which is unclimbable. Inv: you are carrying:   a brass lantern (providing light)   a sword Desc: cellar you are in a dark and damp cellar with a narrow passageway leading north, and a crawlway to the south. on the west is the bottom of a steep metal ramp which is unclimbable.
+Action11: north, Q-Value 32.89
+Q-Values: 1)32.89 north 2)24.66 south 3)23.61 put out lantern 4)19.97 put down sword 5)18.71 put down lantern 6)18.25 put down all 7)15.59 throw lantern at dark 
+Reward11: 0, Score 35, Done False
+Obs12: The Troll Room This is a small room with passages to the east and south and a forbidding hole leading west. Bloodstains and deep scratches (perhaps made by an axe) mar the walls. A nasty looking troll, brandishing a bloody axe, blocks all passages out of the room. Your sword has begun to glow very brightly. Inv: you are carrying:   a brass lantern (providing light)   a sword the axe crashes against the rock, throwing sparks! Desc: the troll room this is a small room with passages to the east and south and a forbidding hole leading west. bloodstains and deep scratches (perhaps made by an axe) mar the walls. a nasty looking troll, brandishing a bloody axe, blocks all passages out of the room. the axe crashes against the rock, throwing sparks!
+Action12: hit troll with sword, Q-Value 36.73
+Q-Values: 1)36.73 hit troll with sword 2)18.21 north 3)16.41 put down sword 4)15.82 south 5)15.43 put out lantern 6)14.71 put down all 7)14.21 put down lantern 8)11.79 give all to troll 9)10.05 throw lantern at axe 
+Reward12: 0, Score 35, Done False
+Obs13: The haft of your sword knocks out the troll. Inv: you are carrying:   a brass lantern (providing light)   a sword Desc: the troll room this is a small room with passages to the east and south and a forbidding hole leading west. bloodstains and deep scratches (perhaps made by an axe) mar the walls. there is a bloody axe here. an unconscious troll is sprawled on the floor. all passages out of the room are open.
+Action13: west, Q-Value 42.08
+Q-Values: 1)42.08 west 2)35.15 east 3)31.58 hit troll with sword 4)30.55 take axe 5)26.20 put down sword 6)25.97 give troll sword 7)23.52 south 8)22.89 take all 9)22.84 put out lantern 10)22.37 give troll all 11)22.00 put down lantern 12)20.73 throw lantern at passages 13)19.68 put down all 14)18.99 take troll 
+Reward13: 0, Score 35, Done False
+Obs14: Maze This is part of a maze of twisty little passages, all alike. Your sword is glowing with a faint blue glow. Inv: you are carrying:   a brass lantern (providing light)   a sword Desc: maze this is part of a maze of twisty little passages, all alike.
+Action14: west, Q-Value 52.19
+Q-Values: 1)52.19 west 2)46.96 north 3)46.34 look around lantern 4)46.33 east 5)44.73 south 6)34.17 put down lantern 7)33.31 put down sword 8)33.29 put down all 9)29.62 put out lantern 10)28.48 throw lantern at passages 
+Reward14: 0, Score 35, Done False
+Obs15: Maze This is part of a maze of twisty little passages, all alike. Your sword is no longer glowing. Inv: you are carrying:   a brass lantern (providing light)   a sword Desc: maze this is part of a maze of twisty little passages, all alike.
+Action15: west, Q-Value 57.33
+Q-Values: 1)57.33 west 2)50.49 east 3)50.32 look around lantern 4)49.98 north 5)36.66 put down lantern 6)35.48 put down all 7)35.10 put down sword 8)32.54 put out lantern 9)30.20 throw lantern at passages 
+Reward15: 0, Score 35, Done False
+Obs16: Maze This is part of a maze of twisty little passages, all alike. Inv: you are carrying:   a brass lantern (providing light)   a sword Desc: maze this is part of a maze of twisty little passages, all alike.
+Action16: up, Q-Value 64.40
+Q-Values: 1)64.40 up 2)59.84 west 3)53.52 north 4)52.12 look around lantern 5)38.72 put down lantern 6)38.11 put down sword 7)37.65 put down all 8)32.48 throw lantern at passages 9)32.42 put out lantern 
+Reward16: 0, Score 35, Done False
+Obs17: Maze This is part of a maze of twisty little passages, all alike. A skeleton, probably the remains of a luckless adventurer, lies here. Beside the skeleton is a rusty knife. The deceased adventurer's useless lantern is here. There is a skeleton key here. An old leather bag, bulging with coins, is here. Inv: you are carrying:   a brass lantern (providing light)   a sword Desc: maze this is part of a maze of twisty little passages, all alike. a skeleton, probably the remains of a luckless adventurer, lies here. beside the skeleton is a rusty knife. the deceased adventurer's useless lantern is here. there is a skeleton key here. an old leather bag, bulging with coins, is here.
+Action17: put down sword, Q-Value 36.71
+Q-Values: 1)72.39 take coins 2)44.99 southwest 3)43.59 look around passages 4)42.53 north 5)38.89 put down all 6)37.39 put down lantern 7)36.99 east 8)36.71 put down sword 9)36.17 take all 10)36.06 put out light 11)33.22 take lantern 12)32.55 take key 13)32.48 take skeleton 14)30.38 take knife 15)29.19 throw lantern at passages 
+Reward17: 0, Score 35, Done False
+Obs18: Dropped. Inv: you are carrying:   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike. a skeleton, probably the remains of a luckless adventurer, lies here. beside the skeleton is a rusty knife. the deceased adventurer's useless lantern is here. there is a sword here. there is a skeleton key here. an old leather bag, bulging with coins, is here.
+Action18: take coins, Q-Value 33.30
+Q-Values: 1)33.30 take coins 2)29.16 take key 3)29.14 southwest 4)29.07 take lantern 5)28.21 take all 6)28.00 look around passages 7)27.92 north 8)27.84 take knife 9)27.74 take sword 10)27.28 put down lantern 11)26.84 take skeleton 12)24.52 throw lantern at passages 13)22.94 east 14)22.37 put out light 
+Reward18: 10, Score 45, Done False
+Obs19: Taken. Inv: you are carrying:   a leather bag of coins   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike. a skeleton, probably the remains of a luckless adventurer, lies here. beside the skeleton is a rusty knife. the deceased adventurer's useless lantern is here. there is a sword here. there is a skeleton key here.
+Action19: southwest, Q-Value 49.01
+Q-Values: 1)49.01 southwest 2)43.79 north 3)42.37 look around passages 4)40.41 put down coins 5)38.89 east 6)37.29 take all 7)35.36 put out light 8)35.01 put down lantern 9)34.37 put down all 10)34.28 take lantern 11)34.03 take skeleton 12)33.35 take key 13)32.62 throw lantern at passages 14)31.94 take sword 15)31.35 take knife 
+Reward19: 0, Score 45, Done False
+Obs20: Maze This is part of a maze of twisty little passages, all alike. Inv: you are carrying:   a leather bag of coins   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike.
+Action20: put down coins, Q-Value 53.52
+Q-Values: 1)53.52 put down coins 2)51.11 east 3)47.57 put down lantern 4)47.42 look around lantern 5)46.18 put down all 6)44.67 west 7)39.32 down 8)38.50 put out lantern 9)35.64 up 10)25.75 throw lantern at passages 
+Reward20: 0, Score 45, Done False
+Obs21: Dropped. Inv: you are carrying:   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike. an old leather bag, bulging with coins, is here.
+Action21: take coins, Q-Value 34.35
+Q-Values: 1)34.35 take coins 2)30.97 up 3)29.44 west 4)29.39 put down lantern 5)27.24 look around passages 6)26.73 down 7)25.61 east 8)17.41 put out lantern 9)15.86 throw lantern at passages 
+Reward21: 0, Score 45, Done False
+Obs22: Taken. Inv: you are carrying:   a leather bag of coins   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike.
+Action22: east, Q-Value 51.10
+Q-Values: 1)51.10 east 2)49.48 look around lantern 3)49.07 west 4)46.58 put down coins 5)42.59 down 6)41.06 put down lantern 7)41.00 up 8)39.44 put down all 9)34.82 put out lantern 10)30.74 throw lantern at passages 
+Reward22: 0, Score 45, Done False
+Obs23: Maze This is part of a maze of twisty little passages, all alike. Inv: you are carrying:   a leather bag of coins   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike.
+Action23: put down coins, Q-Value 43.81
+Q-Values: 1)43.81 put down coins 2)42.64 east 3)41.15 south 4)39.35 put down lantern 5)39.09 look around lantern 6)37.98 put down all 7)36.83 west 8)32.94 down 9)31.11 put out lantern 10)29.62 up 11)21.96 throw lantern at passages 
+Reward23: 0, Score 45, Done False
+Obs24: Dropped. Inv: you are carrying:   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike. an old leather bag, bulging with coins, is here.
+Action24: up, Q-Value 37.73
+Q-Values: 1)37.73 up 2)35.05 take coins 3)34.15 west 4)31.73 south 5)30.65 put down lantern 6)30.00 look around passages 7)29.73 down 8)28.94 east 9)20.24 throw lantern at passages 10)18.30 put out lantern 
+Reward24: 0, Score 45, Done False
+Obs25: Maze This is part of a maze of twisty little passages, all alike. Inv: you are carrying:   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike.
+Action25: west, Q-Value 26.89
+Q-Values: 1)26.89 west 2)26.80 put down lantern 3)26.21 south 4)26.10 look around lantern 5)25.51 northwest 6)18.81 put out lantern 7)12.89 throw lantern at passages 
+Reward25: 0, Score 45, Done False
+Obs26: Maze This is part of a maze of twisty little passages, all alike. Inv: you are carrying:   a brass lantern (providing light) Desc: maze this is part of a maze of twisty little passages, all alike.
+Action26: southeast, Q-Value 28.23
+Q-Values: 1)28.23 southeast 2)27.28 west 3)26.22 south 4)26.07 put down lantern 5)25.92 look around lantern 6)17.99 put out lantern 7)13.89 throw lantern at passages 
+Reward26: 0, Score 45, Done False
+Obs27: Cyclops Room This room has an exit on the northwest, and a staircase leading up. A cyclops, who looks prepared to eat horses (much less mere adventurers), blocks the staircase. From his state of health, and the bloodstains on the walls, you gather that he is not very friendly, though he likes people. Inv: you are carrying:   a brass lantern (providing light) Desc: cyclops room this room has an exit on the northwest, and a staircase leading up. a cyclops, who looks prepared to eat horses (much less mere adventurers), blocks the staircase. from his state of health, and the bloodstains on the walls, you gather that he is not very friendly, though he likes people.
+Action27: odysse, Q-Value 93.13
+Q-Values: 1)93.13 odysse 2)83.99 put down lantern 3)72.63 northwest 4)32.99 put out lantern 5)-4.55 throw lantern at staircase 
+Reward27: 0, Score 45, Done False
+Obs28: The cyclops, hearing the name of his father's deadly nemesis, flees the room by knocking down the wall on the east of the room. Inv: you are carrying:   a brass lantern (providing light) Desc: cyclops room this room has an exit on the northwest, and a staircase leading up. the east wall, previously solid, now has a cyclops sized opening in it.
+Action28: up, Q-Value 117.13
+Q-Values: 1)117.13 up 2)114.03 east 3)105.93 put down lantern 4)101.59 northwest 5)38.57 put out lantern 6)7.67 throw lantern at staircase 
+Reward28: 25, Score 70, Done False
+Obs29: You hear a scream of anguish as you violate the robber's hideaway. Using passages unknown to you, he rushes to its defense. The thief gestures mysteriously, and the treasures in the room suddenly vanish.  Treasure Room This is a large room, whose east wall is solid granite. A number of discarded bags, which crumble at your touch, are scattered about on the floor. There is an exit down a staircase. There is a suspicious looking individual, holding a large bag, leaning against one wall. He is armed with a deadly stiletto. There is a silver chalice, intricately engraved, here. The thief draws blood, raking his stiletto across your arm. Inv: you are carrying:   a brass lantern (providing light) you dodge as the thief comes in low. Desc: treasure room this is a large room, whose east wall is solid granite. a number of discarded bags, which crumble at your touch, are scattered about on the floor. there is an exit down a staircase. there is a suspicious looking individual, holding a large bag, leaning against one wall. he is armed with a deadly stiletto. there is a silver chalice, intricately engraved, here. you dodge as the thief comes in low.
+Action29: temple, Q-Value 95.38
+Q-Values: 1)95.38 temple 2)91.38 put down lantern 3)84.73 give thief lantern 4)80.25 push all 5)77.00 down 6)42.94 put out lantern 7)31.45 throw lantern at silver 
+Reward29: 0, Score 70, Done False
+Obs30: Temple This is the north end of a large temple. On the east wall is an ancient inscription, probably a prayer in a long forgotten language. Below the prayer is a staircase leading down. The west wall is solid granite. The exit to the north end of the room is through huge marble pillars. There is a brass bell here. Inv: you are carrying:   a brass lantern (providing light) Desc: temple this is the north end of a large temple. on the east wall is an ancient inscription, probably a prayer in a long forgotten language. below the prayer is a staircase leading down. the west wall is solid granite. the exit to the north end of the room is through huge marble pillars. there is a brass bell here.
+Action30: throw lantern at prayer, Q-Value 1.30
+Q-Values: 1)117.18 north 2)108.32 south 3)104.57 put down lantern 4)102.76 take bell 5)99.48 east 6)40.16 put out lantern 7)38.47 temple 8)1.30 throw lantern at prayer 
+Reward30: 0, Score 70, Done False
+Obs31: The lamp has smashed into the floor, and the light has gone out. Inv: you are empty handed. Desc: temple this is the north end of a large temple. on the east wall is an ancient inscription, probably a prayer in a long forgotten language. below the prayer is a staircase leading down. the west wall is solid granite. the exit to the north end of the room is through huge marble pillars. there is a broken lantern here. there is a brass bell here.
+Action31: take all, Q-Value 147.07
+Q-Values: 1)147.07 take all 2)138.65 south 3)135.90 take lantern 4)134.17 take bell 5)131.48 north 6)128.08 east 7)60.56 temple 
+Reward31: 0, Score 70, Done False
+Obs32: broken lantern: Taken. brass bell: Taken. Inv: you are carrying:   a brass bell   a broken lantern Desc: temple this is the north end of a large temple. on the east wall is an ancient inscription, probably a prayer in a long forgotten language. below the prayer is a staircase leading down. the west wall is solid granite. the exit to the north end of the room is through huge marble pillars.
+Action32: put down all, Q-Value 109.48
+Q-Values: 1)117.65 south 2)112.23 east 3)111.71 north 4)109.48 put down all 5)105.44 put down lantern 6)100.92 put down bell 7)50.43 temple 
+Reward32: 0, Score 70, Done False
+Obs33: brass bell: Dropped. broken lantern: Dropped. Inv: you are empty handed. Desc: temple this is the north end of a large temple. on the east wall is an ancient inscription, probably a prayer in a long forgotten language. below the prayer is a staircase leading down. the west wall is solid granite. the exit to the north end of the room is through huge marble pillars. there is a broken lantern here. there is a brass bell here.
+Action33: take all, Q-Value 140.88
+Q-Values: 1)140.88 take all 2)137.78 south 3)128.75 take lantern 4)127.79 take bell 5)127.30 north 6)122.20 east 7)61.29 temple 
+Reward33: 0, Score 70, Done False
+Obs34: broken lantern: Taken. brass bell: Taken. Inv: you are carrying:   a brass bell   a broken lantern Desc: temple this is the north end of a large temple. on the east wall is an ancient inscription, probably a prayer in a long forgotten language. below the prayer is a staircase leading down. the west wall is solid granite. the exit to the north end of the room is through huge marble pillars.
+Action34: south, Q-Value 117.65
+Q-Values: 1)117.65 south 2)112.23 east 3)111.71 north 4)109.48 put down all 5)105.44 put down lantern 6)100.92 put down bell 7)50.43 temple 
+Reward34: 0, Score 70, Done False
+Obs35: Altar This is the south end of a large temple. In front of you is what appears to be an altar. In one corner is a small hole in the floor which leads into darkness. You probably could not get back up it. On the two ends of the altar are burning candles. On the altar is a large black book, open to page 569. Inv: you are carrying:   a brass bell   a broken lantern Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. on the two ends of the altar are burning candles. on the altar is a large black book, open to page 569.
+Action35: put all on altar, Q-Value 99.14
+Q-Values: 1)99.14 put all on altar 2)96.84 put lantern on altar 3)95.98 north 4)91.96 put down all 5)91.14 take book 6)89.46 take all 7)89.33 take candles 8)89.09 put bell on altar 9)85.89 put down lantern 10)82.63 put down bell 11)73.01 pray 12)71.79 down 13)60.63 blow out candles 
+Reward35: 0, Score 70, Done False
+Obs36: brass bell: Done. broken lantern: Done. Inv: you are empty handed. Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. on the two ends of the altar are burning candles. on the altar is a large black book, open to page 569. sitting on the altar is:    a broken lantern   a brass bell
+Action36: take book, Q-Value 118.35
+Q-Values: 1)118.35 take book 2)117.75 take all 3)117.58 take all from altar 4)115.31 take candles 5)109.08 north 6)104.87 take lantern 7)103.97 take bell 8)83.19 pray 9)82.22 down 10)78.11 blow out candles 
+Reward36: 0, Score 70, Done False
+Obs37: Taken. Inv: you are carrying:   a black book Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. on the two ends of the altar are burning candles. sitting on the altar is:    a broken lantern   a brass bell
+Action37: take candles, Q-Value 114.64
+Q-Values: 1)114.64 take candles 2)114.04 take all from altar 3)113.13 put book on altar 4)112.02 north 5)111.86 take all 6)109.72 put down book 7)99.71 take lantern 8)99.25 take bell 9)82.10 down 10)81.73 pray 11)79.56 blow out candles 
+Reward37: 0, Score 70, Done False
+Obs38: Taken. Inv: you are carrying:   a pair of candles (providing light)   a black book Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. sitting on the altar is:    a broken lantern   a brass bell
+Action38: put candles on altar, Q-Value 109.83
+Q-Values: 1)109.83 put candles on altar 2)107.01 put book on altar 3)106.25 put all on altar 4)104.69 north 5)100.56 put down book 6)96.72 take all 7)95.54 put down all 8)93.19 put down candles 9)87.57 take lantern 10)86.18 take bell 11)73.22 pray 12)73.15 down 13)69.75 light book with candles 14)67.77 put out candles 
+Reward38: 0, Score 70, Done False
+Obs39: Done. Inv: you are carrying:   a black book Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. sitting on the altar is:    a pair of candles (providing light)   a broken lantern   a brass bell
+Action39: take candles, Q-Value 107.66
+Q-Values: 1)108.14 put book on altar 2)107.66 take candles 3)107.56 put down book 4)106.94 take all 5)105.00 north 6)95.57 take bell 7)94.96 take lantern 8)73.98 pray 9)71.83 blow out candles 10)70.50 down 
+Reward39: 0, Score 70, Done False
+Obs40: Taken. Inv: you are carrying:   a pair of candles (providing light)   a black book Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. sitting on the altar is:    a broken lantern   a brass bell
+Action40: put candles on altar, Q-Value 116.86
+Q-Values: 1)116.86 put candles on altar 2)114.88 put book on altar 3)113.93 put all on altar 4)111.73 north 5)108.54 put down book 6)104.10 take all 7)103.13 put down all 8)100.16 put down candles 9)95.05 take lantern 10)94.43 take bell 11)79.39 down 12)78.83 pray 13)76.23 light book with candles 14)74.14 put out candles 
+Reward40: 0, Score 70, Done False
+Obs41: Done. Inv: you are carrying:   a black book Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. sitting on the altar is:    a pair of candles (providing light)   a broken lantern   a brass bell
+Action41: put book on altar, Q-Value 108.14
+Q-Values: 1)108.14 put book on altar 2)107.66 take candles 3)107.56 put down book 4)106.94 take all 5)105.00 north 6)95.57 take bell 7)94.96 take lantern 8)73.98 pray 9)71.83 blow out candles 10)70.50 down 
+Reward41: 0, Score 70, Done False
+Obs42: Done. Inv: you are empty handed. Desc: altar this is the south end of a large temple. in front of you is what appears to be an altar. in one corner is a small hole in the floor which leads into darkness. you probably could not get back up it. sitting on the altar is:    a black book   a pair of candles (providing light)   a broken lantern   a brass bell
+Action42: pray, Q-Value 49.58
+Q-Values: 1)81.05 take book 2)80.66 take candles 3)78.88 take all 4)76.76 north 5)68.18 take lantern 6)65.65 take bell 7)49.58 pray 8)48.07 down 9)45.36 blow out candles 
+Reward42: 0, Score 70, Done False
+Obs43: Forest This is a forest, with trees in all directions. To the east, there appears to be sunlight. Inv: you are empty handed. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action43: south, Q-Value 24.00
+Q-Values: 1)24.00 south 2)23.09 north 3)22.85 go around trees 4)22.21 east 
+Reward43: 0, Score 70, Done False
+Obs44: Forest This is a dimly lit forest, with large trees all around. Inv: you are empty handed. Desc: forest this is a dimly lit forest, with large trees all around.
+Action44: west, Q-Value 20.76
+Q-Values: 1)20.76 west 2)19.95 go around trees 3)17.60 northwest 4)17.52 north 
+Reward44: 0, Score 70, Done False
+Obs45: Forest Inv: you are empty handed. you hear in the distance the chirping of a song bird. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. you hear in the distance the chirping of a song bird.
+Action45: north, Q-Value 15.78
+Q-Values: 1)15.78 north 2)13.61 east 3)12.54 south 4)10.05 go around trees 
+Reward45: 0, Score 70, Done False
+Obs46: Clearing You are in a clearing, with a forest surrounding you on all sides. A path leads south. On the ground is a pile of leaves. Inv: you are empty handed. Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action46: west, Q-Value 22.90
+Q-Values: 1)22.90 west 2)21.89 south 3)21.06 take leaves 4)20.35 pull leaves 5)19.77 east 
+Reward46: 0, Score 70, Done False
+Obs47: Forest You hear in the distance the chirping of a song bird. Inv: you are empty handed. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action47: south, Q-Value 20.35
+Q-Values: 1)20.35 south 2)20.03 north 3)19.56 go around trees 4)19.55 east 
+Reward47: 0, Score 70, Done False
+Obs48: Forest Inv: you are empty handed. Desc: forest this is a dimly lit forest, with large trees all around.
+Action48: west, Q-Value 22.82
+Q-Values: 1)22.82 west 2)20.62 go around trees 3)18.98 northwest 4)18.87 north 
+Reward48: 0, Score 70, Done False
+Obs49: Forest Inv: you are empty handed. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action49: south, Q-Value 20.23
+Q-Values: 1)20.23 south 2)19.49 north 3)19.02 east 4)18.71 go around trees 
+Reward49: 0, Score 70, Done False
+Obs50: Forest Inv: you are empty handed. Desc: forest this is a dimly lit forest, with large trees all around.
+Action50: west, Q-Value 22.82
+Q-Values: 1)22.82 west 2)20.62 go around trees 3)18.98 northwest 4)18.87 north 
+Reward50: 0, Score 70, Done False
+Obs51: Forest Inv: you are empty handed. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action51: south, Q-Value 20.23
+Q-Values: 1)20.23 south 2)19.49 north 3)19.02 east 4)18.71 go around trees 
+Reward51: 0, Score 70, Done False
+Obs52: Forest Inv: you are empty handed. Desc: forest this is a dimly lit forest, with large trees all around.
+Action52: west, Q-Value 22.82
+Q-Values: 1)22.82 west 2)20.62 go around trees 3)18.98 northwest 4)18.87 north 
+Reward52: 0, Score 70, Done False
+Obs53: Forest Inv: you are empty handed. you hear in the distance the chirping of a song bird. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. you hear in the distance the chirping of a song bird.
+Action53: north, Q-Value 21.10
+Q-Values: 1)21.10 north 2)19.93 south 3)18.97 go around trees 4)18.88 east 
+Reward53: 0, Score 70, Done False
+Obs54: Clearing On the ground is a pile of leaves. Inv: you are empty handed. Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action54: west, Q-Value 22.21
+Q-Values: 1)22.21 west 2)20.70 east 3)20.63 south 4)20.26 pull leaves 5)19.83 take leaves 
+Reward54: 0, Score 70, Done False
+Obs55: Forest You hear in the distance the chirping of a song bird. Inv: you are empty handed. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action55: go around trees, Q-Value 19.56
+Q-Values: 1)20.35 south 2)20.03 north 3)19.56 go around trees 4)19.55 east 
+Reward55: 0, Score 70, Done False
+Obs56: Forest This is a dimly lit forest, with large trees all around. Inv: you are empty handed. Desc: forest this is a dimly lit forest, with large trees all around.
+Action56: go around trees, Q-Value 18.82
+Q-Values: 1)18.82 go around trees 2)18.29 west 3)17.05 south 4)14.78 east 
+Reward56: 0, Score 70, Done False
+Obs57: Forest Inv: you are empty handed. Desc: forest this is a dimly lit forest, with large trees all around.
+Action57: west, Q-Value 21.22
+Q-Values: 1)21.22 west 2)19.00 go around trees 3)17.83 north 4)17.59 northwest 
+Reward57: 0, Score 70, Done False
+Obs58: Forest Inv: you are empty handed. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action58: south, Q-Value 18.66
+Q-Values: 1)18.66 south 2)18.32 north 3)18.09 east 4)17.51 go around trees 
+Reward58: 0, Score 70, Done False
+Obs59: Forest Inv: you are empty handed. you hear in the distance the chirping of a song bird. Desc: forest this is a dimly lit forest, with large trees all around. you hear in the distance the chirping of a song bird.
+Action59: west, Q-Value 23.05
+Q-Values: 1)23.05 west 2)20.77 go around trees 3)20.50 northwest 4)20.07 north 
+Reward59: 0, Score 70, Done False
+Obs60: Forest You hear in the distance the chirping of a song bird. Inv: you are empty handed. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action60: east, Q-Value 17.27
+Q-Values: 1)17.27 east 2)16.67 go around trees 3)16.53 south 4)16.46 north 
+Reward60: 0, Score 70, Done False
+Obs61: Forest Path This is a path winding through a dimly lit forest. The path heads north south here. One particularly large tree with some low branches stands at the edge of the path. Inv: you are empty handed. you hear in the distance the chirping of a song bird. Desc: forest path this is a path winding through a dimly lit forest. the path heads north south here. one particularly large tree with some low branches stands at the edge of the path. you hear in the distance the chirping of a song bird.
+Action61: up, Q-Value 23.30
+Q-Values: 1)23.30 up 2)19.58 west 3)18.56 go around forest 4)18.35 east 5)17.86 south 6)16.44 north 
+Reward61: 0, Score 70, Done False
+Obs62: Up a Tree You are about 10 feet above the ground nestled among some large branches. The nearest branch above you is above your reach. Beside you on the branch is a small bird's nest. In the bird's nest is a large egg encrusted with precious jewels, apparently scavenged by a childless songbird. The egg is covered with fine gold inlay, and ornamented in lapis lazuli and mother of pearl. Unlike most eggs, this one is hinged and closed with a delicate looking clasp. The egg appears extremely fragile. You hear in the distance the chirping of a song bird. Inv: you are empty handed. Desc: up a tree you are about 10 feet above the ground nestled among some large branches. the nearest branch above you is above your reach. beside you on the branch is a small bird's nest. in the bird's nest is a large egg encrusted with precious jewels, apparently scavenged by a childless songbird. the egg is covered with fine gold inlay, and ornamented in lapis lazuli and mother of pearl. unlike most eggs, this one is hinged and closed with a delicate looking clasp. the egg appears extremely fragile.
+Action62: take egg, Q-Value 30.08
+Q-Values: 1)30.08 take egg 2)26.04 take nest 3)25.46 take on egg 4)22.11 close nest 5)21.13 down 
+Reward62: 5, Score 75, Done False
+Obs63: Taken. Inv: you are carrying:   a jewel encrusted egg Desc: up a tree you are about 10 feet above the ground nestled among some large branches. the nearest branch above you is above your reach. beside you on the branch is a small bird's nest.
+Action63: take nest, Q-Value 22.86
+Q-Values: 1)22.86 take nest 2)21.66 take on egg 3)20.72 put egg in nest 4)19.29 close nest 5)18.81 put down egg 6)15.18 throw egg at tree 7)13.01 down 
+Reward63: 0, Score 75, Done False
+Obs64: Taken. Inv: you are carrying:   a bird's nest   a jewel encrusted egg Desc: up a tree you are about 10 feet above the ground nestled among some large branches. the nearest branch above you is above your reach.
+Action64: down, Q-Value 22.59
+Q-Values: 1)23.68 put egg in nest 2)22.59 down 3)22.26 throw nest at egg 4)21.95 open egg with nest 5)21.81 throw nest at tree 6)21.80 put down egg 7)21.70 put down nest 8)21.52 take on egg 9)21.27 close nest 10)20.75 throw egg at tree 11)18.91 put down all 
+Reward64: 0, Score 75, Done False
+Obs65: Forest Path Inv: you are carrying:   a bird's nest   a jewel encrusted egg you hear in the distance the chirping of a song bird. Desc: forest path this is a path winding through a dimly lit forest. the path heads north south here. one particularly large tree with some low branches stands at the edge of the path. you hear in the distance the chirping of a song bird.
+Action65: take on egg, Q-Value 20.30
+Q-Values: 1)20.30 take on egg 2)17.84 put down nest 3)16.55 put egg in nest 4)16.11 close nest 5)15.47 open egg with nest 6)14.67 throw nest at egg 7)14.19 put down egg 8)14.19 throw egg at path 9)14.01 put down all 10)11.22 west 11)10.50 north 12)10.26 south 13)6.73 up 14)5.90 go around forest 15)4.28 east 
+Reward65: 0, Score 75, Done False
+Obs66: There is a noticeable crunch from beneath you, and inspection reveals that the egg is lying open, badly damaged. There is a golden clockwork canary nestled in the egg. It seems to have recently had a bad experience. The mountings for its jewel like eyes are empty, and its silver beak is crumpled. Through a cracked crystal window below its left wing you can see the remains of intricate machinery. It is not clear what result winding it would have, as the mainspring seems sprung. You hear in the distance the chirping of a song bird. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a broken clockwork canary   a bird's nest Desc: forest path this is a path winding through a dimly lit forest. the path heads north south here. one particularly large tree with some low branches stands at the edge of the path.
+Action66: west, Q-Value 21.32
+Q-Values: 1)21.32 west 2)21.32 put canary in nest 3)21.27 put down nest 4)21.19 take canary 5)20.91 put down canary 6)20.68 put egg in nest 7)20.14 go around forest 8)19.99 close nest 9)19.92 put down all 10)19.87 put down egg 11)19.82 close egg 12)18.19 shake egg 13)17.20 east 14)17.15 south 15)16.43 north 16)14.57 up 
+Reward66: 0, Score 75, Done False
+Obs67: Forest Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a broken clockwork canary   a bird's nest Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight.
+Action67: put down nest, Q-Value 21.85
+Q-Values: 1)21.85 put down nest 2)21.46 put canary in nest 3)21.31 put down canary 4)21.29 take canary 5)21.25 put egg in nest 6)20.47 close egg 7)20.30 put down egg 8)20.00 put down all 9)19.19 close nest 10)18.39 shake egg 11)16.25 east 12)16.14 south 13)16.12 north 14)11.06 go around trees 
+Reward67: 0, Score 75, Done False
+Obs68: Dropped. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a broken clockwork canary Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a bird's nest here.
+Action68: put down canary, Q-Value 22.91
+Q-Values: 1)22.91 put down canary 2)22.32 take nest 3)22.05 take canary 4)21.91 put egg in nest 5)21.79 put canary in nest 6)21.74 put down egg 7)19.76 close egg 8)19.59 close nest 9)18.11 shake egg 10)15.38 east 11)14.66 south 12)14.11 go around trees 13)13.36 north 
+Reward68: 0, Score 75, Done False
+Obs69: Dropped. Inv: you are carrying:   a broken jewel encrusted egg you hear in the distance the chirping of a song bird. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a golden clockwork canary nestled in the egg. it seems to have recently had a bad experience. the mountings for its jewel like eyes are empty, and its silver beak is crumpled. through a cracked crystal window below its left wing you can see the remains of intricate machinery. it is not clear what result winding it would have, as the mainspring seems sprung. there is a bird's nest here. you hear in the distance the chirping of a song bird.
+Action69: take nest, Q-Value 24.52
+Q-Values: 1)24.52 take nest 2)24.16 put down egg 3)23.91 put egg in nest 4)23.39 close egg 5)22.65 take canary 6)22.37 close nest 7)21.47 take all 8)17.93 east 9)17.56 south 10)17.38 go around trees 11)16.01 north 
+Reward69: 0, Score 75, Done False
+Obs70: Taken. You hear in the distance the chirping of a song bird. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg you hear in the distance the chirping of a song bird. Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a golden clockwork canary nestled in the egg. it seems to have recently had a bad experience. the mountings for its jewel like eyes are empty, and its silver beak is crumpled. through a cracked crystal window below its left wing you can see the remains of intricate machinery. it is not clear what result winding it would have, as the mainspring seems sprung. you hear in the distance the chirping of a song bird.
+Action70: put down nest, Q-Value 21.76
+Q-Values: 1)21.76 put down nest 2)20.92 put nest in egg 3)20.76 take canary 4)20.48 close nest 5)20.22 put down egg 6)20.21 close egg 7)20.00 put egg in nest 8)19.53 put down all 9)13.88 east 10)13.16 north 11)12.92 south 12)10.99 go around trees 
+Reward70: 0, Score 75, Done False
+Obs71: Dropped. You hear in the distance the chirping of a song bird. Inv: you are carrying:   a broken jewel encrusted egg Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a golden clockwork canary nestled in the egg. it seems to have recently had a bad experience. the mountings for its jewel like eyes are empty, and its silver beak is crumpled. through a cracked crystal window below its left wing you can see the remains of intricate machinery. it is not clear what result winding it would have, as the mainspring seems sprung. there is a bird's nest here.
+Action71: take nest, Q-Value 24.78
+Q-Values: 1)24.78 take nest 2)23.99 put down egg 3)23.80 close egg 4)23.77 put egg in nest 5)22.67 take canary 6)22.52 close nest 7)21.34 take all 8)20.92 go around trees 9)20.74 east 10)20.41 south 11)20.02 north 
+Reward71: 0, Score 75, Done False
+Obs72: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a golden clockwork canary nestled in the egg. it seems to have recently had a bad experience. the mountings for its jewel like eyes are empty, and its silver beak is crumpled. through a cracked crystal window below its left wing you can see the remains of intricate machinery. it is not clear what result winding it would have, as the mainspring seems sprung.
+Action72: put down egg, Q-Value 22.65
+Q-Values: 1)22.65 put down egg 2)22.28 close egg 3)22.18 put egg in nest 4)21.99 put nest in egg 5)21.59 put down nest 6)21.49 take canary 7)20.12 close nest 8)20.05 east 9)19.54 put down all 10)18.90 south 11)18.10 north 12)17.60 go around trees 
+Reward72: 0, Score 75, Done False
+Obs73: Dropped. Inv: you are carrying:   a bird's nest Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a golden clockwork canary nestled in the egg. it seems to have recently had a bad experience. the mountings for its jewel like eyes are empty, and its silver beak is crumpled. through a cracked crystal window below its left wing you can see the remains of intricate machinery. it is not clear what result winding it would have, as the mainspring seems sprung. there is a somewhat ruined egg here.
+Action73: take egg, Q-Value 22.67
+Q-Values: 1)22.67 take egg 2)22.53 close egg 3)21.57 put nest in egg 4)21.16 put down nest 5)21.03 take canary 6)20.86 close nest 7)20.12 take all 8)17.88 east 9)16.28 go around trees 10)16.27 south 11)14.45 north 
+Reward73: 0, Score 75, Done False
+Obs74: Taken. Inv: you are carrying:   a broken jewel encrusted egg   a bird's nest Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a golden clockwork canary nestled in the egg. it seems to have recently had a bad experience. the mountings for its jewel like eyes are empty, and its silver beak is crumpled. through a cracked crystal window below its left wing you can see the remains of intricate machinery. it is not clear what result winding it would have, as the mainspring seems sprung.
+Action74: put nest in egg, Q-Value 24.21
+Q-Values: 1)24.21 put nest in egg 2)24.18 put down egg 3)23.83 put down nest 4)23.36 put egg in nest 5)23.11 close egg 6)22.97 take canary 7)22.26 put down all 8)21.65 wait 9)21.54 close nest 10)17.80 east 11)16.57 south 12)15.73 go around trees 13)14.35 north 
+Reward74: 0, Score 75, Done False
+Obs75: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: forest this is a forest, with trees in all directions. to the east, there appears to be sunlight. there is a golden clockwork canary nestled in the egg. it seems to have recently had a bad experience. the mountings for its jewel like eyes are empty, and its silver beak is crumpled. through a cracked crystal window below its left wing you can see the remains of intricate machinery. it is not clear what result winding it would have, as the mainspring seems sprung.
+Action75: north, Q-Value 20.96
+Q-Values: 1)24.71 put egg in nest 2)24.02 put down egg 3)23.92 take nest 4)23.58 put down nest 5)23.51 shake egg 6)23.44 wait 7)23.38 close egg 8)22.57 south 9)22.54 take canary 10)21.96 east 11)21.83 close nest 12)21.04 go around trees 13)20.96 north 
+Reward75: 0, Score 75, Done False
+Obs76: Clearing On the ground is a pile of leaves. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action76: take nest, Q-Value 20.87
+Q-Values: 1)20.87 take nest 2)20.57 put down nest 3)16.53 close nest 4)16.01 put down egg 5)14.35 close egg 6)13.81 take leaves 7)13.74 put egg in nest 8)13.13 west 9)12.00 east 10)11.73 shake egg 11)11.40 south 12)9.85 pull leaves 13)7.27 north 
+Reward76: 0, Score 75, Done False
+Obs77: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action77: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward77: 0, Score 75, Done False
+Obs78: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action78: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward78: 0, Score 75, Done False
+Obs79: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action79: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward79: 0, Score 75, Done False
+Obs80: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action80: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward80: 0, Score 75, Done False
+Obs81: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action81: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward81: 0, Score 75, Done False
+Obs82: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action82: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward82: 0, Score 75, Done False
+Obs83: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action83: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward83: 0, Score 75, Done False
+Obs84: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action84: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward84: 0, Score 75, Done False
+Obs85: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action85: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward85: 0, Score 75, Done False
+Obs86: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action86: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward86: 0, Score 75, Done False
+Obs87: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action87: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward87: 0, Score 75, Done False
+Obs88: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action88: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward88: 0, Score 75, Done False
+Obs89: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action89: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward89: 0, Score 75, Done False
+Obs90: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action90: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward90: 0, Score 75, Done False
+Obs91: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action91: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward91: 0, Score 75, Done False
+Obs92: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action92: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward92: 0, Score 75, Done False
+Obs93: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action93: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward93: 0, Score 75, Done False
+Obs94: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action94: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)9.99 wait 13)8.58 east 
+Reward94: 0, Score 75, Done False
+Obs95: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action95: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.69 wait 11)20.31 south 12)20.05 west 13)18.81 east 
+Reward95: 0, Score 75, Done False
+Obs96: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action96: take nest, Q-Value 22.52
+Q-Values: 1)22.52 take nest 2)22.07 put down nest 3)19.16 put down egg 4)17.04 close nest 5)16.44 put egg in nest 6)15.78 take leaves 7)15.10 close egg 8)13.33 pull leaves 9)12.95 south 10)12.33 shake egg 11)12.18 west 12)10.50 east 13)5.75 north 
+Reward96: 0, Score 75, Done False
+Obs97: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action97: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward97: 0, Score 75, Done False
+Obs98: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action98: take nest, Q-Value 21.50
+Q-Values: 1)21.50 take nest 2)21.23 put down nest 3)17.41 put down egg 4)15.54 close nest 5)14.72 put egg in nest 6)14.02 take leaves 7)13.43 close egg 8)11.49 pull leaves 9)11.37 south 10)10.53 shake egg 11)10.34 west 12)8.58 east 
+Reward98: 0, Score 75, Done False
+Obs99: Taken. Inv: you are carrying:   a bird's nest   a broken jewel encrusted egg Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Action99: put nest in egg, Q-Value 23.80
+Q-Values: 1)23.80 put nest in egg 2)23.63 put down egg 3)23.41 put down nest 4)22.87 close egg 5)22.27 close nest 6)22.14 pull leaves 7)21.99 take leaves 8)21.78 put egg in nest 9)21.07 put down all 10)20.31 south 11)20.05 west 12)18.81 east 
+Reward99: 0, Score 75, Done True
+Obs100: Done. Inv: you are carrying:   a broken jewel encrusted egg   the broken jewel encrusted egg contains:     a bird's nest Desc: clearing you are in a clearing, with a forest surrounding you on all sides. a path leads south. on the ground is a pile of leaves.
+Evaluation episode 0 ended with score 75
